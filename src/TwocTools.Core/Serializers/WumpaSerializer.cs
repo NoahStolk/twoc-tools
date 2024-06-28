@@ -6,7 +6,7 @@ namespace TwocTools.Core.Serializers;
 
 public static class WumpaSerializer
 {
-	public static List<Wumpa> Deserialize(BinaryReader reader)
+	public static WumpaCollection Deserialize(BinaryReader reader)
 	{
 		int wumpaCount = reader.ReadInt32();
 
@@ -19,6 +19,6 @@ public static class WumpaSerializer
 			wumpas.Add(wumpa);
 		}
 
-		return wumpas;
+		return new WumpaCollection(wumpas);
 	}
 }

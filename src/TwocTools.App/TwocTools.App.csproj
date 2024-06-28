@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TwocTools.Core\TwocTools.Core.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NativeFileDialogSharp" Version="0.5.0"/>
+    <PackageReference Include="NoahStolk.Detach" Version="0.11.0"/>
+    <PackageReference Include="NoahStolk.ImGuiGlfw" Version="0.7.0"/>
+  </ItemGroup>
+
+</Project>

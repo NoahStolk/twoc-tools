@@ -6,7 +6,7 @@ namespace TwocTools.Core.Serializers;
 
 public static class CrateSerializer
 {
-	public static List<CrateGroup> Deserialize(BinaryReader reader)
+	public static CrateGroupCollection Deserialize(BinaryReader reader)
 	{
 		uint version = reader.ReadUInt32(); // Default version is 4?
 		ushort crateGroupCount = reader.ReadUInt16();
@@ -58,6 +58,6 @@ public static class CrateSerializer
 			crateGroups.Add(crateGroup);
 		}
 
-		return crateGroups;
+		return new CrateGroupCollection(version, crateGroups);
 	}
 }

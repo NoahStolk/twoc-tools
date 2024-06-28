@@ -1,16 +1,19 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Numerics;
 
 namespace TwocTools.Core.DataTypes;
 
-public record struct CrateGroup
+public record CrateGroup : IEnumerable<Crate>
 {
+	private readonly List<Crate> _crates;
+
 	public CrateGroup(Vector3 position, ushort crateOffset, ushort crateCount, ushort tilt, List<Crate> crates)
 	{
 		Position = position;
 		CrateOffset = crateOffset;
 		CrateCount = crateCount;
 		Tilt = tilt;
-		Crates = crates;
+		_crates = crates;
 	}
 
 	public Vector3 Position { get; }
@@ -21,5 +24,17 @@ public record struct CrateGroup
 
 	public ushort Tilt { get; }
 
-	public List<Crate> Crates { get; }
+	public int Count => _crates.Count;
+
+	public Crate this[int index] => _crates[index];
+
+	public IEnumerator<Crate> GetEnumerator()
+	{
+		return _crates.GetEnumerator();
+	}
+
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
 }
