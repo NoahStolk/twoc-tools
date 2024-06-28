@@ -5,7 +5,7 @@
 | 1       | Arctic Antics            | snow_m             |
 | 2       | Tornado Alley            | farm               |
 | 3       | Bamboozled               | jungle_a           |
-| 4       | Wizards And Lizards      |                    |
+| 4       | Wizards And Lizards      | castle_c           |
 | 5       | Compactor Reactor        |                    |
 | BOSS 1  | Rumble In The Roks       | earth_b            |
 | 6       | Jungle Rumble            | jungle_r           |
@@ -18,17 +18,17 @@
 | 12      | Tsunami                  | tsunami            |
 | 13      | Smokey and the Bandicoot | west_a             |
 | 14      | Eskimo Roll              | cold_a             |
-| 15      | Fahrenheit Frenzy        |                    |
+| 15      | Fahrenheit Frenzy        | fire_r             |
 | BOSS 3  | Crashes to Ashes         | fire_b             |
 | 16      | Avalanche                | avalanch           |
 | 17      | Droid Void               | droid              |
 | 18      | Crashteroids             | space_a            |
 | 19      | Coral Canyon             | coral_c            |
-| 20      | Weathering Heights       |                    |
+| 20      | Weathering Heights       | weath_r            |
 | BOSS 4  | Atmospheric Pressure     | weath_b            |
 | 21      | Crash and Burn           | volcano            |
 | 22      | Gold Rush                | western            |
-| 23      | Medieval Madness         |                    |
+| 23      | Medieval Madness         | castle_a           |
 | 24      | Crate Balls of Fire      | fireball           |
 | 25      | Cortex Vortex            |                    |
 | BOSS 5  | Crunch Time              | space_b            |

@@ -19,4 +19,5 @@ public enum CrateType : byte
 	Nitro = 16,
 	NitroSwitch = 17,
 	Locked = 19,
+	Invincibility = 20,
 }
