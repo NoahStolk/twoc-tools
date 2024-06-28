@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwocTools.Core", "TwocTools.Core\TwocTools.Core.csproj", "{4A989C45-83B5-481A-9D8F-A1CB9E504192}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwocTools.Cmd", "TwocTools.Cmd\TwocTools.Cmd.csproj", "{3A95359E-7C52-4E4E-8A9C-AB2F9BCE1FBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4A989C45-83B5-481A-9D8F-A1CB9E504192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A989C45-83B5-481A-9D8F-A1CB9E504192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A989C45-83B5-481A-9D8F-A1CB9E504192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A989C45-83B5-481A-9D8F-A1CB9E504192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A95359E-7C52-4E4E-8A9C-AB2F9BCE1FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A95359E-7C52-4E4E-8A9C-AB2F9BCE1FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A95359E-7C52-4E4E-8A9C-AB2F9BCE1FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A95359E-7C52-4E4E-8A9C-AB2F9BCE1FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
