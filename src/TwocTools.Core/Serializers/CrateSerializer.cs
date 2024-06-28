@@ -27,13 +27,13 @@ public static class CrateSerializer
 				ushort rotationX = reader.ReadUInt16();
 				ushort rotationZ = reader.ReadUInt16();
 				ushort rotationY = reader.ReadUInt16();
-				byte b = reader.ReadByte();
-				byte c = 0xFF;
+				CrateType crateType = (CrateType)reader.ReadByte();
+				CrateType crateTypeTimeTrial = (CrateType)0xFF;
 				byte d = 0xFF;
 				byte e = 0xFF;
 				if (version >= 3)
 				{
-					c = reader.ReadByte();
+					crateTypeTimeTrial = (CrateType)reader.ReadByte();
 					d = reader.ReadByte();
 					e = reader.ReadByte();
 				}
@@ -50,7 +50,7 @@ public static class CrateSerializer
 					l = reader.ReadUInt16();
 				}
 
-				Crate crate = new(cratePosition, a, rotationX, rotationZ, rotationY, b, c, d, e, f, g, h, i, j, k, l);
+				Crate crate = new(cratePosition, a, rotationX, rotationZ, rotationY, crateType, crateTypeTimeTrial, d, e, f, g, h, i, j, k, l);
 				crates.Add(crate);
 			}
 

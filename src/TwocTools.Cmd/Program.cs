@@ -28,7 +28,7 @@ foreach (string filePath in Directory.GetFiles(levelPath, "*.CRT"))
 		Console.WriteLine(crateGroup.Count);
 		foreach (Crate crate in crateGroup)
 		{
-			Console.WriteLine($"{crate.B} {crate.C} {crate.D} {crate.E} {crate.Position:0.00}");
+			Console.WriteLine($"{crate.CrateType} {crate.CrateTypeTimeTrial} {crate.D} {crate.E} {crate.Position:0.00}");
 		}
 	}
 }

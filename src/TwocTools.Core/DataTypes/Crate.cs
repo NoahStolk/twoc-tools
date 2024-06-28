@@ -10,8 +10,8 @@ public record struct Crate
 		ushort rotationX,
 		ushort rotationZ,
 		ushort rotationY,
-		byte b,
-		byte c,
+		CrateType crateType,
+		CrateType crateTypeTimeTrial,
 		byte d,
 		byte e,
 		ushort f,
@@ -27,8 +27,8 @@ public record struct Crate
 		RotationX = rotationX;
 		RotationZ = rotationZ;
 		RotationY = rotationY;
-		B = b;
-		C = c;
+		CrateType = crateType;
+		CrateTypeTimeTrial = crateTypeTimeTrial;
 		D = d;
 		E = e;
 		F = f;
@@ -50,14 +50,21 @@ public record struct Crate
 
 	public ushort RotationY { get; }
 
-	// B, C, D, E = crate types.
-	// C, D, E are only present when crate group version is 3 or higher.
-	public byte B { get; }
+	public CrateType CrateType { get; }
 
-	public byte C { get; }
+	/// <summary>
+	/// This value is only present when crate group version is 3 or higher.
+	/// </summary>
+	public CrateType CrateTypeTimeTrial { get; }
 
+	/// <summary>
+	/// This value is only present when crate group version is 3 or higher.
+	/// </summary>
 	public byte D { get; }
 
+	/// <summary>
+	/// This value is only present when crate group version is 3 or higher.
+	/// </summary>
 	public byte E { get; }
 
 	public ushort F { get; }
@@ -72,6 +79,8 @@ public record struct Crate
 
 	public ushort K { get; }
 
-	// L is only present when crate group version is 3 or higher.
+	/// <summary>
+	/// This value is only present when crate group version is 3 or higher.
+	/// </summary>
 	public ushort L { get; }
 }

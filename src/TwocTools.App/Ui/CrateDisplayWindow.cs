@@ -49,8 +49,8 @@ public static class CrateDisplayWindow
 			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 240, 0);
 			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 1);
 			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthFixed, 120, 2);
-			ImGui.TableSetupColumn("B", ImGuiTableColumnFlags.WidthFixed, 40, 3);
-			ImGui.TableSetupColumn("C", ImGuiTableColumnFlags.WidthFixed, 40, 4);
+			ImGui.TableSetupColumn("B", ImGuiTableColumnFlags.WidthFixed, 160, 3);
+			ImGui.TableSetupColumn("C", ImGuiTableColumnFlags.WidthFixed, 160, 4);
 			ImGui.TableSetupColumn("D", ImGuiTableColumnFlags.WidthFixed, 40, 5);
 			ImGui.TableSetupColumn("E", ImGuiTableColumnFlags.WidthFixed, 40, 6);
 			ImGui.TableSetupColumn("F, G, H, I, J, K, L", ImGuiTableColumnFlags.WidthStretch, 0, 7);
@@ -87,8 +87,8 @@ public static class CrateDisplayWindow
 
 						return sortAscending ? result : -result;
 					}),
-					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.B.CompareTo(b.B) : -a.B.CompareTo(b.B)),
-					4 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.C.CompareTo(b.C) : -a.C.CompareTo(b.C)),
+					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateType.CompareTo(b.CrateType) : -a.CrateType.CompareTo(b.CrateType)),
+					4 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeTimeTrial.CompareTo(b.CrateTypeTimeTrial) : -a.CrateTypeTimeTrial.CompareTo(b.CrateTypeTimeTrial)),
 					5 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.D.CompareTo(b.D) : -a.D.CompareTo(b.D)),
 					6 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.E.CompareTo(b.E) : -a.E.CompareTo(b.E)),
 					7 => () => _cratesVisualization.Sort((a, b) =>
@@ -130,10 +130,10 @@ public static class CrateDisplayWindow
 				ImGui.Text(Inline.Span($"{crate.RotationX}, {crate.RotationY}, {crate.RotationZ}"));
 
 				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span(crate.B));
+				ImGui.Text(Inline.Span(crate.CrateType));
 
 				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span(crate.C));
+				ImGui.Text(Inline.Span(crate.CrateTypeTimeTrial));
 
 				ImGui.TableNextColumn();
 				ImGui.Text(Inline.Span(crate.D));
