@@ -30,7 +30,7 @@ public static class WumpaDisplayWindow
 
 			ImGui.Separator();
 
-			ImGui.Text($"Wumpa count: {_wumpaCollection.Count}");
+			ImGui.Text(Inline.Span($"Wumpa count: {_wumpaCollection.Count}"));
 
 			if (ImGui.BeginTable("WumpasTable", 1, ImGuiTableFlags.ScrollY))
 			{
@@ -42,8 +42,8 @@ public static class WumpaDisplayWindow
 				foreach (Wumpa wumpa in _wumpaCollection)
 				{
 					ImGui.TableNextRow();
-					ImGui.TableNextColumn();
 
+					ImGui.TableNextColumn();
 					ImGui.Text(Inline.Span(wumpa.Position));
 				}
 

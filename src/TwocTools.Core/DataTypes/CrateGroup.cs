@@ -7,7 +7,7 @@ public record CrateGroup : IEnumerable<Crate>
 {
 	private readonly List<Crate> _crates;
 
-	public CrateGroup(Vector3 position, ushort crateOffset, ushort crateCount, ushort tilt, List<Crate> crates)
+	internal CrateGroup(Vector3 position, ushort crateOffset, ushort crateCount, ushort tilt, List<Crate> crates)
 	{
 		Position = position;
 		CrateOffset = crateOffset;
