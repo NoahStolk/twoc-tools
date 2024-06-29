@@ -24,30 +24,30 @@ public static class CrateSerializer
 			{
 				Vector3 cratePosition = reader.ReadVector3();
 				float a = reader.ReadSingle();
-				ushort rotationX = reader.ReadUInt16();
-				ushort rotationZ = reader.ReadUInt16();
-				ushort rotationY = reader.ReadUInt16();
+				short rotationX = reader.ReadInt16();
+				short rotationZ = reader.ReadInt16();
+				short rotationY = reader.ReadInt16();
 				CrateType crateType = (CrateType)reader.ReadByte();
 				CrateType crateTypeTimeTrial = (CrateType)0xFF;
-				byte d = 0xFF;
-				byte e = 0xFF;
+				sbyte d = -1;
+				sbyte e = -1;
 				if (version >= 3)
 				{
 					crateTypeTimeTrial = (CrateType)reader.ReadByte();
-					d = reader.ReadByte();
-					e = reader.ReadByte();
+					d = reader.ReadSByte();
+					e = reader.ReadSByte();
 				}
 
-				ushort f = reader.ReadUInt16();
-				ushort g = reader.ReadUInt16();
-				ushort h = reader.ReadUInt16();
-				ushort i = reader.ReadUInt16();
-				ushort j = reader.ReadUInt16();
-				ushort k = reader.ReadUInt16();
-				ushort l = 0xFFFF;
+				short f = reader.ReadInt16();
+				short g = reader.ReadInt16();
+				short h = reader.ReadInt16();
+				short i = reader.ReadInt16();
+				short j = reader.ReadInt16();
+				short k = reader.ReadInt16();
+				short l = -1;
 				if (version >= 3)
 				{
-					l = reader.ReadUInt16();
+					l = reader.ReadInt16();
 				}
 
 				Crate crate = new(cratePosition, a, rotationX, rotationZ, rotationY, crateType, crateTypeTimeTrial, d, e, f, g, h, i, j, k, l);

@@ -7,20 +7,20 @@ public record struct Crate
 	public Crate(
 		Vector3 position,
 		float a,
-		ushort rotationX,
-		ushort rotationZ,
-		ushort rotationY,
+		short rotationX,
+		short rotationZ,
+		short rotationY,
 		CrateType crateType,
 		CrateType crateTypeTimeTrial,
-		byte d,
-		byte e,
-		ushort f,
-		ushort g,
-		ushort h,
-		ushort i,
-		ushort j,
-		ushort k,
-		ushort l)
+		sbyte d,
+		sbyte e,
+		short f,
+		short g,
+		short h,
+		short i,
+		short j,
+		short k,
+		short l)
 	{
 		Position = position;
 		A = a;
@@ -44,11 +44,11 @@ public record struct Crate
 
 	public float A { get; }
 
-	public ushort RotationX { get; }
+	public short RotationX { get; }
 
-	public ushort RotationZ { get; }
+	public short RotationZ { get; }
 
-	public ushort RotationY { get; }
+	public short RotationY { get; }
 
 	public CrateType CrateType { get; }
 
@@ -60,27 +60,27 @@ public record struct Crate
 	/// <summary>
 	/// This value is only present when crate group version is 3 or higher.
 	/// </summary>
-	public byte D { get; }
+	public sbyte D { get; }
 
 	/// <summary>
 	/// This value is only present when crate group version is 3 or higher.
 	/// </summary>
-	public byte E { get; }
+	public sbyte E { get; }
 
-	public ushort F { get; }
+	public short F { get; }
 
-	public ushort G { get; }
+	public short G { get; }
 
-	public ushort H { get; }
+	public short H { get; }
 
-	public ushort I { get; }
+	public short I { get; }
 
-	public ushort J { get; }
+	public short J { get; }
 
-	public ushort K { get; }
+	public short K { get; }
 
 	/// <summary>
 	/// This value is only present when crate group version is 3 or higher.
 	/// </summary>
-	public ushort L { get; }
+	public short L { get; }
 }
