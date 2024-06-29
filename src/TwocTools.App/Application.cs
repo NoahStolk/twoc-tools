@@ -69,7 +69,6 @@ public sealed class Application
 
 		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		ImGui.ShowDemoWindow();
 		CrateDisplayWindow.Render();
 		WumpaDisplayWindow.Render();
 

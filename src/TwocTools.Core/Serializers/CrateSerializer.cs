@@ -1,13 +1,16 @@
 ﻿using System.Numerics;
 using TwocTools.Core.DataTypes;
-using TwocTools.Core.Extensions;
+using TwocTools.Core.Internals;
 
 namespace TwocTools.Core.Serializers;
 
 public static class CrateSerializer
 {
-	public static CrateGroupCollection Deserialize(BinaryReader reader)
+	public static CrateGroupCollection Deserialize(Stream input)
 	{
+		input.Position = 0;
+
+		using BigEndianBinaryReader reader = new(input);
 		uint version = reader.ReadUInt32(); // Default version is 4?
 		ushort crateGroupCount = reader.ReadUInt16();
 

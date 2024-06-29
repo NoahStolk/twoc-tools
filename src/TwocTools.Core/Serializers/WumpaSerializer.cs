@@ -1,13 +1,16 @@
 ﻿using System.Numerics;
 using TwocTools.Core.DataTypes;
-using TwocTools.Core.Extensions;
+using TwocTools.Core.Internals;
 
 namespace TwocTools.Core.Serializers;
 
 public static class WumpaSerializer
 {
-	public static WumpaCollection Deserialize(BinaryReader reader)
+	public static WumpaCollection Deserialize(Stream input)
 	{
+		input.Position = 0;
+
+		using BigEndianBinaryReader reader = new(input);
 		int wumpaCount = reader.ReadInt32();
 
 		List<Wumpa> wumpas = new(wumpaCount);

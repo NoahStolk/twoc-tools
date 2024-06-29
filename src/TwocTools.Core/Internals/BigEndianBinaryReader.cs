@@ -1,9 +1,10 @@
 ﻿using System.Buffers.Binary;
+using System.Numerics;
 using System.Text;
 
 namespace TwocTools.Core.Internals;
 
-public class BigEndianBinaryReader : BinaryReader
+internal sealed class BigEndianBinaryReader : BinaryReader
 {
 	public BigEndianBinaryReader(Stream input)
 		: base(input)
@@ -74,5 +75,10 @@ public class BigEndianBinaryReader : BinaryReader
 		Span<byte> bytes = stackalloc byte[sizeof(double)];
 		BaseStream.ReadExactly(bytes);
 		return BinaryPrimitives.ReadDoubleBigEndian(bytes);
+	}
+
+	public Vector3 ReadVector3()
+	{
+		return new Vector3(ReadSingle(), ReadSingle(), ReadSingle());
 	}
 }

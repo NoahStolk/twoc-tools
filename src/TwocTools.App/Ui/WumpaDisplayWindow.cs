@@ -2,7 +2,6 @@
 using ImGuiNET;
 using NativeFileDialogSharp;
 using TwocTools.Core.DataTypes;
-using TwocTools.Core.Internals;
 using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;
@@ -17,8 +16,8 @@ public static class WumpaDisplayWindow
 		if (!dialogResult.IsOk)
 			return;
 
-		using BigEndianBinaryReader br = new(File.OpenRead(dialogResult.Path));
-		_wumpaCollection = WumpaSerializer.Deserialize(br);
+		using FileStream fs = File.OpenRead(dialogResult.Path);
+		_wumpaCollection = WumpaSerializer.Deserialize(fs);
 	}
 
 	public static void Render()
