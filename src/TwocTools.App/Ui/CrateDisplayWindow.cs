@@ -3,6 +3,7 @@ using ImGuiNET;
 using NativeFileDialogSharp;
 using System.Numerics;
 using TwocTools.App.Extensions;
+using TwocTools.Core;
 using TwocTools.Core.DataTypes;
 using TwocTools.Core.Serializers;
 
@@ -27,7 +28,7 @@ public static class CrateDisplayWindow
 			return;
 
 		using FileStream fs = File.OpenRead(dialogResult.Path);
-		_crateGroupCollection = CrateSerializer.Deserialize(fs);
+		_crateGroupCollection = CrateSerializer.Deserialize(fs, Endianness.Little); // TODO: Choose from UI.
 		_crateGroupVisualization = _crateGroupCollection.ToList();
 		_cratesVisualization = _crateGroupCollection.SelectMany(c => c).ToList();
 	}

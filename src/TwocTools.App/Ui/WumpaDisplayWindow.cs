@@ -1,6 +1,7 @@
 ﻿using Detach;
 using ImGuiNET;
 using NativeFileDialogSharp;
+using TwocTools.Core;
 using TwocTools.Core.DataTypes;
 using TwocTools.Core.Serializers;
 
@@ -17,7 +18,7 @@ public static class WumpaDisplayWindow
 			return;
 
 		using FileStream fs = File.OpenRead(dialogResult.Path);
-		_wumpaCollection = WumpaSerializer.Deserialize(fs);
+		_wumpaCollection = WumpaSerializer.Deserialize(fs, Endianness.Little); // TODO: Choose from UI.
 	}
 
 	public static void Render()

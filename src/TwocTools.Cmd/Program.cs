@@ -1,4 +1,5 @@
-﻿using TwocTools.Core.DataTypes;
+﻿using TwocTools.Core;
+using TwocTools.Core.DataTypes;
 using TwocTools.Core.Serializers;
 
 const string levelPath = @"F:\Games\Game Stuff\Crash Bandicoot\The Wrath Of Cortex\ISO Extract\levels\a\western";
@@ -6,7 +7,7 @@ const string levelPath = @"F:\Games\Game Stuff\Crash Bandicoot\The Wrath Of Cort
 foreach (string filePath in Directory.GetFiles(levelPath, "*.WMP"))
 {
 	using FileStream fileStream = File.OpenRead(filePath);
-	WumpaCollection wumpaCollection = WumpaSerializer.Deserialize(fileStream);
+	WumpaCollection wumpaCollection = WumpaSerializer.Deserialize(fileStream, Endianness.Big);
 
 	Console.WriteLine(wumpaCollection.Count);
 	foreach (Wumpa wumpa in wumpaCollection)
@@ -18,7 +19,7 @@ foreach (string filePath in Directory.GetFiles(levelPath, "*.WMP"))
 foreach (string filePath in Directory.GetFiles(levelPath, "*.CRT"))
 {
 	using FileStream fileStream = File.OpenRead(filePath);
-	CrateGroupCollection crateCollection = CrateSerializer.Deserialize(fileStream);
+	CrateGroupCollection crateCollection = CrateSerializer.Deserialize(fileStream, Endianness.Big);
 
 	Console.WriteLine(crateCollection.Sum(cg => cg.Count));
 	foreach (CrateGroup crateGroup in crateCollection)

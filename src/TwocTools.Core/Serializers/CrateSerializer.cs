@@ -1,16 +1,21 @@
 ﻿using System.Numerics;
 using TwocTools.Core.DataTypes;
 using TwocTools.Core.Internals;
+using TwocTools.Core.Internals.Extensions;
 
 namespace TwocTools.Core.Serializers;
 
 public static class CrateSerializer
 {
-	public static CrateGroupCollection Deserialize(Stream input)
+	public static CrateGroupCollection Deserialize(Stream input, Endianness endianness)
 	{
 		input.Position = 0;
 
-		using BigEndianBinaryReader reader = new(input);
+		using BinaryReader reader = endianness switch
+		{
+			Endianness.Big => new BigEndianBinaryReader(input),
+			_ => new BinaryReader(input),
+		};
 		uint version = reader.ReadUInt32(); // Default version is 4?
 		ushort crateGroupCount = reader.ReadUInt16();
 
@@ -31,7 +36,7 @@ public static class CrateSerializer
 				short rotationZ = reader.ReadInt16();
 				short rotationY = reader.ReadInt16();
 				CrateType crateType = (CrateType)reader.ReadByte();
-				CrateType crateTypeTimeTrial = (CrateType)0xFF;
+				CrateType crateTypeTimeTrial = CrateType.Unknown255;
 				sbyte d = -1;
 				sbyte e = -1;
 				if (version >= 3)
