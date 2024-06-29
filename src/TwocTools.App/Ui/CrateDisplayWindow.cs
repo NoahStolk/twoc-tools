@@ -93,11 +93,8 @@ public static class CrateDisplayWindow
 			{
 				ImGui.TableNextRow();
 
-				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span(crateType));
-
-				ImGui.TableNextColumn();
-				ImGui.Text(Inline.Span(_cratesVisualization.Count(c => c.CrateType == crateType)));
+				TableNextColumnText(Inline.Span(crateType), crateType.GetColor());
+				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateType == crateType)));
 			}
 
 			ImGui.EndTable();
