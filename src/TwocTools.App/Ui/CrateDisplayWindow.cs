@@ -33,12 +33,33 @@ public static class CrateDisplayWindow
 		_cratesVisualization = _crateGroupCollection.SelectMany(c => c).ToList();
 	}
 
+	private static void LoadCratesFromDirectory()
+	{
+		DialogResult dialogResult = Dialog.FolderPicker();
+		if (!dialogResult.IsOk)
+			return;
+
+		_crateGroupCollection = CrateGroupCollection.Empty;
+		_crateGroupVisualization = [];
+		_cratesVisualization = [];
+
+		foreach (string crtPath in Directory.GetFiles(dialogResult.Path, "*.crt", SearchOption.AllDirectories))
+		{
+			using FileStream fs = File.OpenRead(crtPath);
+			CrateGroupCollection crateGroupCollection = CrateSerializer.Deserialize(fs, Endianness.Little); // TODO: Choose from UI.
+			_cratesVisualization.AddRange(crateGroupCollection.SelectMany(c => c));
+		}
+	}
+
 	public static void Render()
 	{
 		if (ImGui.Begin("Crate Display"))
 		{
 			if (ImGui.Button("Load Crate (.crt) file"))
 				LoadCrates();
+
+			if (ImGui.Button("Load all Crate files from directory"))
+				LoadCratesFromDirectory();
 
 			ImGui.Separator();
 
@@ -83,10 +104,13 @@ public static class CrateDisplayWindow
 
 	private static void RenderCrateTypeCountsTable()
 	{
-		if (ImGui.BeginTable("CrateTypeCountsTable", 2))
+		if (ImGui.BeginTable("CrateTypeCountsTable", 5))
 		{
 			ImGui.TableSetupColumn("Type", ImGuiTableColumnFlags.WidthFixed, 160, 0);
-			ImGui.TableSetupColumn("Count", ImGuiTableColumnFlags.WidthFixed, 80, 1);
+			ImGui.TableSetupColumn("Count A", ImGuiTableColumnFlags.WidthFixed, 80, 1);
+			ImGui.TableSetupColumn("Count B", ImGuiTableColumnFlags.WidthFixed, 80, 1);
+			ImGui.TableSetupColumn("Count C", ImGuiTableColumnFlags.WidthFixed, 80, 1);
+			ImGui.TableSetupColumn("Count D", ImGuiTableColumnFlags.WidthFixed, 80, 1);
 
 			ImGui.TableHeadersRow();
 
@@ -95,7 +119,10 @@ public static class CrateDisplayWindow
 				ImGui.TableNextRow();
 
 				TableNextColumnText(Inline.Span(crateType), crateType.GetColor());
-				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateType == crateType)));
+				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeA == crateType)));
+				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeB == crateType)));
+				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeC == crateType)));
+				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeD == crateType)));
 			}
 
 			ImGui.EndTable();
@@ -163,10 +190,10 @@ public static class CrateDisplayWindow
 			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 240, 0);
 			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 1);
 			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthFixed, 120, 2);
-			ImGui.TableSetupColumn("Crate Type", ImGuiTableColumnFlags.WidthFixed, 160, 3);
-			ImGui.TableSetupColumn("Crate Type Time Trial", ImGuiTableColumnFlags.WidthFixed, 160, 4);
-			ImGui.TableSetupColumn("D", ImGuiTableColumnFlags.WidthFixed, 40, 5);
-			ImGui.TableSetupColumn("E", ImGuiTableColumnFlags.WidthFixed, 40, 6);
+			ImGui.TableSetupColumn("Crate Type A", ImGuiTableColumnFlags.WidthFixed, 160, 3);
+			ImGui.TableSetupColumn("Crate Type B", ImGuiTableColumnFlags.WidthFixed, 160, 4);
+			ImGui.TableSetupColumn("Crate Type C", ImGuiTableColumnFlags.WidthFixed, 160, 5);
+			ImGui.TableSetupColumn("Crate Type D", ImGuiTableColumnFlags.WidthFixed, 160, 6);
 			ImGui.TableSetupColumn("F", ImGuiTableColumnFlags.WidthFixed, 40, 7);
 			ImGui.TableSetupColumn("G", ImGuiTableColumnFlags.WidthFixed, 40, 8);
 			ImGui.TableSetupColumn("H", ImGuiTableColumnFlags.WidthFixed, 40, 9);
@@ -207,10 +234,10 @@ public static class CrateDisplayWindow
 
 						return sortAscending ? result : -result;
 					}),
-					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateType.CompareTo(b.CrateType) : -a.CrateType.CompareTo(b.CrateType)),
-					4 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeTimeTrial.CompareTo(b.CrateTypeTimeTrial) : -a.CrateTypeTimeTrial.CompareTo(b.CrateTypeTimeTrial)),
-					5 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.D.CompareTo(b.D) : -a.D.CompareTo(b.D)),
-					6 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.E.CompareTo(b.E) : -a.E.CompareTo(b.E)),
+					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeA.CompareTo(b.CrateTypeA) : -a.CrateTypeA.CompareTo(b.CrateTypeA)),
+					4 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeB.CompareTo(b.CrateTypeB) : -a.CrateTypeB.CompareTo(b.CrateTypeB)),
+					5 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeC.CompareTo(b.CrateTypeC) : -a.CrateTypeC.CompareTo(b.CrateTypeC)),
+					6 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeD.CompareTo(b.CrateTypeD) : -a.CrateTypeD.CompareTo(b.CrateTypeD)),
 					7 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.F.CompareTo(b.F) : -a.F.CompareTo(b.F)),
 					8 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.G.CompareTo(b.G) : -a.G.CompareTo(b.G)),
 					9 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.H.CompareTo(b.H) : -a.H.CompareTo(b.H)),
@@ -234,10 +261,10 @@ public static class CrateDisplayWindow
 				TableNextColumnText(Inline.Span(crate.Position));
 				TableNextColumnText(Inline.Span(crate.A), crate.A is > -float.Epsilon and < float.Epsilon ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span($"{crate.RotationX}, {crate.RotationY}, {crate.RotationZ}"));
-				TableNextColumnText(Inline.Span(crate.CrateType), crate.CrateType.GetColor());
-				TableNextColumnText(Inline.Span(crate.CrateTypeTimeTrial), crate.CrateTypeTimeTrial == crate.CrateType ? colorDisabled : crate.CrateTypeTimeTrial.GetColor());
-				TableNextColumnText(Inline.Span(crate.D), crate.D == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.E), crate.E == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Span(crate.CrateTypeA), crate.CrateTypeA.GetColor());
+				TableNextColumnText(Inline.Span(crate.CrateTypeB), crate.CrateTypeB.GetColor());
+				TableNextColumnText(Inline.Span(crate.CrateTypeC), crate.CrateTypeC.GetColor());
+				TableNextColumnText(Inline.Span(crate.CrateTypeD), crate.CrateTypeD.GetColor());
 				TableNextColumnText(Inline.Span(crate.F), crate.F == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span(crate.G), crate.G == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span(crate.H), crate.H == -1 ? colorDisabled : colorDefault);

@@ -10,10 +10,10 @@ public record struct Crate
 		short rotationX,
 		short rotationZ,
 		short rotationY,
-		CrateType crateType,
-		CrateType crateTypeTimeTrial,
-		sbyte d,
-		sbyte e,
+		CrateType crateTypeA,
+		CrateType crateTypeB,
+		CrateType crateTypeC,
+		CrateType crateTypeD,
 		short f,
 		short g,
 		short h,
@@ -27,10 +27,10 @@ public record struct Crate
 		RotationX = rotationX;
 		RotationZ = rotationZ;
 		RotationY = rotationY;
-		CrateType = crateType;
-		CrateTypeTimeTrial = crateTypeTimeTrial;
-		D = d;
-		E = e;
+		CrateTypeA = crateTypeA;
+		CrateTypeB = crateTypeB;
+		CrateTypeC = crateTypeC;
+		CrateTypeD = crateTypeD;
 		F = f;
 		G = g;
 		H = h;
@@ -50,22 +50,28 @@ public record struct Crate
 
 	public short RotationY { get; }
 
-	public CrateType CrateType { get; }
+	/// <summary>
+	/// The default crate type.
+	/// </summary>
+	public CrateType CrateTypeA { get; }
 
 	/// <summary>
-	/// This value is only present when crate group version is 3 or higher.
+	/// The second crate type. This seems to be used for time trial.
 	/// </summary>
-	public CrateType CrateTypeTimeTrial { get; }
+	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
+	public CrateType CrateTypeB { get; }
 
 	/// <summary>
-	/// This value is only present when crate group version is 3 or higher.
+	/// This third crate type. This seems to be used for crates of type <see cref="CrateType.Slot"/>.
 	/// </summary>
-	public sbyte D { get; }
+	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
+	public CrateType CrateTypeC { get; }
 
 	/// <summary>
-	/// This value is only present when crate group version is 3 or higher.
+	/// This third crate type. This seems to be used for crates of type <see cref="CrateType.Slot"/>.
 	/// </summary>
-	public sbyte E { get; }
+	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
+	public CrateType CrateTypeD { get; }
 
 	public short F { get; }
 
