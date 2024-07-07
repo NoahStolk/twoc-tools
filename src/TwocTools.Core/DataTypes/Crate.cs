@@ -7,11 +7,11 @@ public record struct Crate
 	public Crate(
 		int index,
 		int groupIndex,
-		Vector3 position,
+		Vector3 worldPosition,
 		float a,
-		short rotationX,
-		short rotationZ,
-		short rotationY,
+		short localPositionX,
+		short localPositionY,
+		short localPositionZ,
 		CrateType crateTypeA,
 		CrateType crateTypeB,
 		CrateType crateTypeC,
@@ -26,11 +26,11 @@ public record struct Crate
 	{
 		Index = index;
 		GroupIndex = groupIndex;
-		Position = position;
+		WorldPosition = worldPosition;
 		A = a;
-		RotationX = rotationX;
-		RotationZ = rotationZ;
-		RotationY = rotationY;
+		LocalPositionX = localPositionX;
+		LocalPositionY = localPositionY;
+		LocalPositionZ = localPositionZ;
 		CrateTypeA = crateTypeA;
 		CrateTypeB = crateTypeB;
 		CrateTypeC = crateTypeC;
@@ -48,15 +48,15 @@ public record struct Crate
 
 	public int GroupIndex { get; }
 
-	public Vector3 Position { get; }
+	public Vector3 WorldPosition { get; }
 
 	public float A { get; }
 
-	public short RotationX { get; }
+	public short LocalPositionX { get; }
 
-	public short RotationZ { get; }
+	public short LocalPositionY { get; }
 
-	public short RotationY { get; }
+	public short LocalPositionZ { get; }
 
 	/// <summary>
 	/// The default crate type.

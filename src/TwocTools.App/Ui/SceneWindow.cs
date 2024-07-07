@@ -59,7 +59,7 @@ public static class SceneWindow
 		{
 			foreach (Crate crate in crateGroup)
 			{
-				Obb obb = new(crate.Position * new Vector3(-1, 1, 1), new Vector3(0.25f), Matrix3.Identity); // TODO: Orientation.
+				Obb obb = new(crate.WorldPosition * new Vector3(-1, 1, 1), new Vector3(0.25f), Matrix3.Identity); // TODO: Orientation.
 
 				if (Geometry3D.Raycast(obb, ray, out RaycastResult raycastResult) && raycastResult.Distance < closestDistance)
 				{
@@ -72,8 +72,8 @@ public static class SceneWindow
 		if (selectedCrate.HasValue)
 		{
 			ReadOnlySpan<char> tooltip = Inline.Span($"""
-				Position: {selectedCrate.Value.Position.X} {selectedCrate.Value.Position.Y} {selectedCrate.Value.Position.Z}
-				Rotation: {selectedCrate.Value.RotationX} {selectedCrate.Value.RotationY} {selectedCrate.Value.RotationZ}
+				World position: {selectedCrate.Value.WorldPosition.X} {selectedCrate.Value.WorldPosition.Y} {selectedCrate.Value.WorldPosition.Z}
+				Local position: {selectedCrate.Value.LocalPositionX} {selectedCrate.Value.LocalPositionY} {selectedCrate.Value.LocalPositionZ}
 				Crate types: {selectedCrate.Value.CrateTypeA} {selectedCrate.Value.CrateTypeB} {selectedCrate.Value.CrateTypeC} {selectedCrate.Value.CrateTypeD}
 				Misc: {selectedCrate.Value.A} {selectedCrate.Value.F} {selectedCrate.Value.G} {selectedCrate.Value.H} {selectedCrate.Value.I} {selectedCrate.Value.J} {selectedCrate.Value.K} {selectedCrate.Value.L}
 				""");

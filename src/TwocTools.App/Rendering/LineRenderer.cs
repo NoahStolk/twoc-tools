@@ -1,4 +1,5 @@
 ﻿using Detach.Numerics;
+using Detach.Utils;
 using Silk.NET.OpenGL;
 using System.Numerics;
 using TwocTools.App.Extensions;
@@ -127,12 +128,10 @@ public sealed class LineRenderer
 			{
 				Crate crate = crateGroup[i];
 
-				float yaw = (float)(crate.RotationY * (2 * Math.PI / 65536f));
-				float pitch = (float)(crate.RotationX * (2 * Math.PI / 65536f));
-				float roll = (float)(crate.RotationZ * (2 * Math.PI / 65536f));
-				Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(yaw, pitch, roll);
+				float tiltInRadians = (float)(crateGroup.Tilt * (2 * Math.PI / 65536f));
+				Matrix4x4 rotationMatrix = Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, tiltInRadians);
 
-				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * rotationMatrix * Matrix4x4.CreateTranslation(crate.Position * new Vector3(-1, 1, 1)));
+				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * rotationMatrix * Matrix4x4.CreateTranslation(crate.WorldPosition * new Vector3(-1, 1, 1)));
 				Gl.Uniform4(_colorUniform, crate.CrateTypeA.GetColor());
 				Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_cubeVertices.Length);
 			}
@@ -142,8 +141,10 @@ public sealed class LineRenderer
 	private void RenderWumpa()
 	{
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(0.25f);
-		foreach (Wumpa wumpa in LevelState.WumpaCollection)
+		for (int i = 0; i < LevelState.WumpaCollection.Count; i++)
 		{
+			Wumpa wumpa = LevelState.WumpaCollection[i];
+
 			Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(wumpa.Position * new Vector3(-1, 1, 1)));
 			Gl.Uniform4(_colorUniform, Rgba.Orange with { A = 160 });
 			Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_sphereVertices.Length);

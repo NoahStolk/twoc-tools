@@ -32,9 +32,9 @@ public static class CrateSerializer
 			{
 				Vector3 cratePosition = reader.ReadVector3();
 				float a = reader.ReadSingle();
-				short rotationX = reader.ReadInt16();
-				short rotationZ = reader.ReadInt16();
-				short rotationY = reader.ReadInt16();
+				short localPositionX = reader.ReadInt16();
+				short localPositionY = reader.ReadInt16();
+				short localPositionZ = reader.ReadInt16();
 				CrateType crateTypeA = (CrateType)reader.ReadByte();
 				CrateType crateTypeB = CrateType.Unknown255;
 				CrateType crateTypeC = CrateType.Unknown255;
@@ -61,11 +61,11 @@ public static class CrateSerializer
 				crates.Add(new Crate(
 					index: crateOffset + crateIndex,
 					groupIndex: crateGroupIndex,
-					position: cratePosition,
+					worldPosition: cratePosition,
 					a: a,
-					rotationX: rotationX,
-					rotationZ: rotationZ,
-					rotationY: rotationY,
+					localPositionX: localPositionX,
+					localPositionY: localPositionY,
+					localPositionZ: localPositionZ,
 					crateTypeA: crateTypeA,
 					crateTypeB: crateTypeB,
 					crateTypeC: crateTypeC,
