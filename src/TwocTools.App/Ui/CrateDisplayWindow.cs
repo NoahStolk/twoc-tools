@@ -13,6 +13,7 @@ public static class CrateDisplayWindow
 {
 	// Utilities
 	private static readonly List<CrateType> _allCrateTypes = Enum.GetValues<CrateType>().ToList();
+	private static readonly Dictionary<CrateType, string> _crateTypeNames = _allCrateTypes.ToDictionary(t => t, t => t.ToString());
 
 	// State
 	private static CrateGroupCollection _crateGroupCollection = CrateGroupCollection.Empty;
@@ -185,7 +186,8 @@ public static class CrateDisplayWindow
 
 	private static unsafe void RenderCratesTable()
 	{
-		if (ImGui.BeginTable("CratesTable", 14, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
+		const int columnCount = 14;
+		if (ImGui.BeginTable("CratesTable", columnCount, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
 		{
 			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 240, 0);
 			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 1);
@@ -204,6 +206,27 @@ public static class CrateDisplayWindow
 
 			ImGui.TableSetupScrollFreeze(0, 1);
 			ImGui.TableHeadersRow();
+
+			for (int i = 0; i < columnCount; i++)
+			{
+				if (!ImGui.TableSetColumnIndex(i))
+					continue;
+
+				ImGui.TableHeader(ImGui.TableGetColumnName(i));
+				if (!ImGui.IsItemHovered())
+					continue;
+
+				string? tooltip = i switch
+				{
+					3 => "The default crate type",
+					4 => "The crate type used for time trial",
+					5 => "For slot crates: The first option\nFor empty crates: The crate type that the empty crate will change into when the corresponding exclamation crate is triggered",
+					6 => "For slot crates: The second option",
+					_ => null,
+				};
+				if (tooltip != null)
+					ImGui.SetTooltip(tooltip);
+			}
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
 			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
@@ -261,10 +284,10 @@ public static class CrateDisplayWindow
 				TableNextColumnText(Inline.Span(crate.Position));
 				TableNextColumnText(Inline.Span(crate.A), crate.A is > -float.Epsilon and < float.Epsilon ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span($"{crate.RotationX}, {crate.RotationY}, {crate.RotationZ}"));
-				TableNextColumnText(Inline.Span(crate.CrateTypeA), crate.CrateTypeA.GetColor());
-				TableNextColumnText(Inline.Span(crate.CrateTypeB), crate.CrateTypeB.GetColor());
-				TableNextColumnText(Inline.Span(crate.CrateTypeC), crate.CrateTypeC.GetColor());
-				TableNextColumnText(Inline.Span(crate.CrateTypeD), crate.CrateTypeD.GetColor());
+				TableNextColumnText(_crateTypeNames[crate.CrateTypeA], crate.CrateTypeA.GetColor());
+				TableNextColumnText(_crateTypeNames[crate.CrateTypeB], crate.CrateTypeB.GetColor());
+				TableNextColumnText(_crateTypeNames[crate.CrateTypeC], crate.CrateTypeC.GetColor());
+				TableNextColumnText(_crateTypeNames[crate.CrateTypeD], crate.CrateTypeD.GetColor());
 				TableNextColumnText(Inline.Span(crate.F), crate.F == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span(crate.G), crate.G == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span(crate.H), crate.H == -1 ? colorDisabled : colorDefault);

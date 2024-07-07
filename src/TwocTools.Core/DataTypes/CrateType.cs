@@ -4,7 +4,7 @@
 public enum CrateType : byte
 #pragma warning restore CA1028, CA1027, CA1008
 {
-	Unknown0 = 0,
+	Empty = 0,
 	Default = 1,
 	Life = 2,
 	AkuAku = 3,

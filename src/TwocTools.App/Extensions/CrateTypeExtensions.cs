@@ -9,6 +9,7 @@ public static class CrateTypeExtensions
 	{
 		return crateType switch
 		{
+			CrateType.Empty => new Rgb(191, 191, 255),
 			CrateType.Default => new Rgb(160, 100, 0),
 			CrateType.Life => new Rgb(255, 127, 255),
 			CrateType.AkuAku => Rgb.Orange,

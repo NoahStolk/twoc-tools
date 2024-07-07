@@ -62,7 +62,7 @@ public record struct Crate
 	public CrateType CrateTypeB { get; }
 
 	/// <summary>
-	/// This third crate type. This seems to be used for crates of type <see cref="CrateType.Slot"/>.
+	/// This third crate type. This seems to be used for crates of type <see cref="CrateType.Slot"/> and <see cref="CrateType.Empty"/>.
 	/// </summary>
 	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
 	public CrateType CrateTypeC { get; }
@@ -87,6 +87,7 @@ public record struct Crate
 
 	/// <summary>
 	/// This value is only present when crate group version is 3 or higher.
+	/// It has something to do with crates of type <see cref="CrateType.Empty"/>.
 	/// </summary>
 	public short L { get; }
 }
