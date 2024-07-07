@@ -11,7 +11,13 @@ public static class WumpaDisplayWindow
 	{
 		if (ImGui.Begin("Wumpa Display"))
 		{
+			ImGui.Text(LevelState.WumpaCollectionPath);
+
+			ImGui.Separator();
+
 			ImGui.Text(Inline.Span($"Wumpa count: {LevelState.WumpaCollection.Count}"));
+
+			ImGui.Separator();
 
 			if (ImGui.BeginTable("WumpasTable", 1, ImGuiTableFlags.ScrollY))
 			{

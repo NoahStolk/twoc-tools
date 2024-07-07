@@ -7,7 +7,7 @@ using TwocTools.Core.DataTypes;
 
 namespace TwocTools.App.Ui;
 
-public static class CrateDisplayWindow
+public static unsafe class CrateDisplayWindow
 {
 	// Utilities
 	private static readonly List<CrateType> _allCrateTypes = Enum.GetValues<CrateType>().ToList();
@@ -24,41 +24,22 @@ public static class CrateDisplayWindow
 		_cratesVisualization = LevelState.CrateGroupCollection.SelectMany(c => c).ToList();
 	}
 
-	// private static void LoadCratesFromDirectory()
-	// {
-	// 	DialogResult dialogResult = Dialog.FolderPicker();
-	// 	if (!dialogResult.IsOk)
-	// 		return;
-	//
-	// 	_crateGroupCollection = CrateGroupCollection.Empty;
-	// 	_crateGroupVisualization = [];
-	// 	_cratesVisualization = [];
-	//
-	// 	foreach (string crtPath in Directory.GetFiles(dialogResult.Path, "*.crt", SearchOption.AllDirectories))
-	// 	{
-	// 		using FileStream fs = File.OpenRead(crtPath);
-	// 		CrateGroupCollection crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
-	// 		_cratesVisualization.AddRange(crateGroupCollection.SelectMany(c => c));
-	// 	}
-	// }
-
 	public static void Render()
 	{
 		if (ImGui.Begin("Crate Display"))
 		{
+			ImGui.Text(LevelState.CrateGroupCollectionPath);
+
+			ImGui.Separator();
+
+			ImGui.Text(Inline.Span($"Version: {LevelState.CrateGroupCollection.Version}"));
+			ImGui.Text(Inline.Span($"Crate group count: {LevelState.CrateGroupCollection.Count}"));
+			ImGui.Text(Inline.Span($"Crate count: {_cratesVisualization.Count}"));
+
 			ImGui.Separator();
 
 			if (ImGui.BeginTabBar("CrateDisplayTabBar"))
 			{
-				if (ImGui.BeginTabItem("Info"))
-				{
-					ImGui.Text(Inline.Span($"Version: {LevelState.CrateGroupCollection.Version}"));
-					ImGui.Text(Inline.Span($"Crate group count: {LevelState.CrateGroupCollection.Count}"));
-					ImGui.Text(Inline.Span($"Crate count: {_cratesVisualization.Count}"));
-
-					ImGui.EndTabItem();
-				}
-
 				if (ImGui.BeginTabItem("Crate Type Counts"))
 				{
 					RenderCrateTypeCountsTable();
@@ -103,18 +84,26 @@ public static class CrateDisplayWindow
 			{
 				ImGui.TableNextRow();
 
+				Vector4 colorDefault = *ImGui.GetStyleColorVec4(ImGuiCol.Text);
+				Vector4 colorDisabled = *ImGui.GetStyleColorVec4(ImGuiCol.TextDisabled);
+
+				int countA = _cratesVisualization.Count(c => c.CrateTypeA == crateType);
+				int countB = _cratesVisualization.Count(c => c.CrateTypeB == crateType);
+				int countC = _cratesVisualization.Count(c => c.CrateTypeC == crateType);
+				int countD = _cratesVisualization.Count(c => c.CrateTypeD == crateType);
+
 				TableNextColumnText(Inline.Span(crateType), crateType.GetColor());
-				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeA == crateType)));
-				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeB == crateType)));
-				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeC == crateType)));
-				TableNextColumnText(Inline.Span(_cratesVisualization.Count(c => c.CrateTypeD == crateType)));
+				TableNextColumnText(Inline.Span(countA), countA == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Span(countB), countB == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Span(countC), countC == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Span(countD), countD == 0 ? colorDisabled : colorDefault);
 			}
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static unsafe void RenderCrateGroupsTable()
+	private static void RenderCrateGroupsTable()
 	{
 		if (ImGui.BeginTable("CrateGroupsTable", 14, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
 		{
@@ -168,7 +157,7 @@ public static class CrateDisplayWindow
 		}
 	}
 
-	private static unsafe void RenderCratesTable()
+	private static void RenderCratesTable()
 	{
 		const int columnCount = 14;
 		if (ImGui.BeginTable("CratesTable", columnCount, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))

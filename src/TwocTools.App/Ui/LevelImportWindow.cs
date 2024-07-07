@@ -44,14 +44,8 @@ public static class LevelImportWindow
 
 			if (ImGui.Button("Import"))
 			{
-				WumpaCollection wumpaCollection = WumpaCollection.Empty;
 				CrateGroupCollection crateGroupCollection = CrateGroupCollection.Empty;
-
-				if (File.Exists(_wmpFilePath))
-				{
-					using FileStream fs = File.OpenRead(_wmpFilePath);
-					wumpaCollection = WumpaSerializer.Deserialize(fs, _endianness);
-				}
+				WumpaCollection wumpaCollection = WumpaCollection.Empty;
 
 				if (File.Exists(_crtFilePath))
 				{
@@ -59,7 +53,17 @@ public static class LevelImportWindow
 					crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
 				}
 
-				LevelState.SetLevel(crateGroupCollection, wumpaCollection);
+				if (File.Exists(_wmpFilePath))
+				{
+					using FileStream fs = File.OpenRead(_wmpFilePath);
+					wumpaCollection = WumpaSerializer.Deserialize(fs, _endianness);
+				}
+
+				LevelState.SetLevel(
+					_crtFilePath ?? "<None>",
+					_wmpFilePath ?? "<None>",
+					crateGroupCollection,
+					wumpaCollection);
 			}
 		}
 
