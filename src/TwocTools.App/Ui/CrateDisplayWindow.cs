@@ -17,6 +17,7 @@ public static class CrateDisplayWindow
 
 	// State
 	private static CrateGroupCollection _crateGroupCollection = CrateGroupCollection.Empty;
+	private static Endianness _endianness = Endianness.Little;
 
 	// Visualization created from state (used for sorting, etc.)
 	private static List<CrateGroup> _crateGroupVisualization = [];
@@ -29,7 +30,7 @@ public static class CrateDisplayWindow
 			return;
 
 		using FileStream fs = File.OpenRead(dialogResult.Path);
-		_crateGroupCollection = CrateSerializer.Deserialize(fs, Endianness.Little); // TODO: Choose from UI.
+		_crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
 		_crateGroupVisualization = _crateGroupCollection.ToList();
 		_cratesVisualization = _crateGroupCollection.SelectMany(c => c).ToList();
 	}
@@ -47,7 +48,7 @@ public static class CrateDisplayWindow
 		foreach (string crtPath in Directory.GetFiles(dialogResult.Path, "*.crt", SearchOption.AllDirectories))
 		{
 			using FileStream fs = File.OpenRead(crtPath);
-			CrateGroupCollection crateGroupCollection = CrateSerializer.Deserialize(fs, Endianness.Little); // TODO: Choose from UI.
+			CrateGroupCollection crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
 			_cratesVisualization.AddRange(crateGroupCollection.SelectMany(c => c));
 		}
 	}
@@ -56,6 +57,20 @@ public static class CrateDisplayWindow
 	{
 		if (ImGui.Begin("Crate Display"))
 		{
+			if (ImGui.BeginCombo("Endianness", _endianness.ToString()))
+			{
+				foreach (Endianness endianness in Enum.GetValues<Endianness>())
+				{
+					bool isSelected = _endianness == endianness;
+					if (ImGui.Selectable(endianness.ToString(), isSelected))
+						_endianness = endianness;
+					if (isSelected)
+						ImGui.SetItemDefaultFocus();
+				}
+
+				ImGui.EndCombo();
+			}
+
 			if (ImGui.Button("Load Crate (.crt) file"))
 				LoadCrates();
 
