@@ -123,9 +123,16 @@ public sealed class LineRenderer
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(0.5f);
 		foreach (CrateGroup crateGroup in LevelState.CrateGroupCollection)
 		{
-			foreach (Crate crate in crateGroup)
+			for (int i = 0; i < crateGroup.Count; i++)
 			{
-				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(crate.Position * new Vector3(-1, 1, 1)));
+				Crate crate = crateGroup[i];
+
+				float yaw = (float)(crate.RotationY * (2 * Math.PI / 65536f));
+				float pitch = (float)(crate.RotationX * (2 * Math.PI / 65536f));
+				float roll = (float)(crate.RotationZ * (2 * Math.PI / 65536f));
+				Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(yaw, pitch, roll);
+
+				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * rotationMatrix * Matrix4x4.CreateTranslation(crate.Position * new Vector3(-1, 1, 1)));
 				Gl.Uniform4(_colorUniform, crate.CrateTypeA.GetColor());
 				Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_cubeVertices.Length);
 			}
