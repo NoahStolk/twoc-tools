@@ -52,10 +52,10 @@ public static class CrateSerializer
 				short i = reader.ReadInt16();
 				short j = reader.ReadInt16();
 				short k = reader.ReadInt16();
-				short l = -1;
+				short exclamationCrateIndex = -1;
 				if (version >= 3)
 				{
-					l = reader.ReadInt16();
+					exclamationCrateIndex = reader.ReadInt16();
 				}
 
 				crates.Add(new Crate(
@@ -76,7 +76,7 @@ public static class CrateSerializer
 					i: i,
 					j: j,
 					k: k,
-					l: l));
+					exclamationCrateIndex: exclamationCrateIndex));
 			}
 
 			CrateGroup crateGroup = new(position, crateOffset, crateCount, tilt, crates);

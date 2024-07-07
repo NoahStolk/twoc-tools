@@ -175,17 +175,17 @@ public static unsafe class CrateInfoWindow
 			ImGui.TableSetupColumn("World Position", ImGuiTableColumnFlags.WidthFixed, 240, 2);
 			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 3);
 			ImGui.TableSetupColumn("Local Position", ImGuiTableColumnFlags.WidthFixed, 120, 4);
-			ImGui.TableSetupColumn("Crate Type A", ImGuiTableColumnFlags.WidthFixed, 160, 5);
-			ImGui.TableSetupColumn("Crate Type B", ImGuiTableColumnFlags.WidthFixed, 160, 6);
-			ImGui.TableSetupColumn("Crate Type C", ImGuiTableColumnFlags.WidthFixed, 160, 7);
-			ImGui.TableSetupColumn("Crate Type D", ImGuiTableColumnFlags.WidthFixed, 160, 8);
+			ImGui.TableSetupColumn("Type A", ImGuiTableColumnFlags.WidthFixed, 96, 5);
+			ImGui.TableSetupColumn("Type B", ImGuiTableColumnFlags.WidthFixed, 96, 6);
+			ImGui.TableSetupColumn("Type C", ImGuiTableColumnFlags.WidthFixed, 96, 7);
+			ImGui.TableSetupColumn("Type D", ImGuiTableColumnFlags.WidthFixed, 96, 8);
 			ImGui.TableSetupColumn("F", ImGuiTableColumnFlags.WidthFixed, 40, 9);
 			ImGui.TableSetupColumn("G", ImGuiTableColumnFlags.WidthFixed, 40, 10);
 			ImGui.TableSetupColumn("H", ImGuiTableColumnFlags.WidthFixed, 40, 11);
 			ImGui.TableSetupColumn("I", ImGuiTableColumnFlags.WidthFixed, 40, 12);
 			ImGui.TableSetupColumn("J", ImGuiTableColumnFlags.WidthFixed, 40, 13);
 			ImGui.TableSetupColumn("K", ImGuiTableColumnFlags.WidthFixed, 40, 14);
-			ImGui.TableSetupColumn("L", ImGuiTableColumnFlags.WidthFixed, 40, 15);
+			ImGui.TableSetupColumn("Exclamation Index", ImGuiTableColumnFlags.WidthFixed, 128, 15);
 
 			ImGui.TableSetupScrollFreeze(0, 1);
 			ImGui.TableHeadersRow();
@@ -205,6 +205,7 @@ public static unsafe class CrateInfoWindow
 					6 => "The crate type used for time trial",
 					7 => "For slot crates: The first option\nFor empty crates: The crate type that the empty crate will change into when the corresponding exclamation crate is triggered",
 					8 => "For slot crates: The second option",
+					15 => "For empty crates: The index of the exclamation crate that will change the empty crate into the crate type specified in the 'Type C' column",
 					_ => null,
 				};
 				if (tooltip != null)
@@ -252,7 +253,7 @@ public static unsafe class CrateInfoWindow
 					12 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.I.CompareTo(b.I) : -a.I.CompareTo(b.I)),
 					13 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.J.CompareTo(b.J) : -a.J.CompareTo(b.J)),
 					14 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.K.CompareTo(b.K) : -a.K.CompareTo(b.K)),
-					15 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.L.CompareTo(b.L) : -a.L.CompareTo(b.L)),
+					15 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex) : -a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex)),
 					_ => static () => { },
 				};
 				sortAction();
@@ -281,7 +282,7 @@ public static unsafe class CrateInfoWindow
 				TableNextColumnText(Inline.Span(crate.I), crate.I == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span(crate.J), crate.J == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span(crate.K), crate.K == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.L), crate.L == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Span(crate.ExclamationCrateIndex), crate.ExclamationCrateIndex == -1 ? colorDisabled : colorDefault);
 			}
 
 			ImGui.EndTable();

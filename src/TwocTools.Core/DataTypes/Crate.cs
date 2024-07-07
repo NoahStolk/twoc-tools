@@ -22,7 +22,7 @@ public record struct Crate
 		short i,
 		short j,
 		short k,
-		short l)
+		short exclamationCrateIndex)
 	{
 		Index = index;
 		GroupIndex = groupIndex;
@@ -41,7 +41,7 @@ public record struct Crate
 		I = i;
 		J = j;
 		K = k;
-		L = l;
+		ExclamationCrateIndex = exclamationCrateIndex;
 	}
 
 	public int Index { get; }
@@ -97,5 +97,5 @@ public record struct Crate
 	/// This value is only present when crate group version is 3 or higher.
 	/// It has something to do with crates of type <see cref="CrateType.Empty"/>.
 	/// </summary>
-	public short L { get; }
+	public short ExclamationCrateIndex { get; }
 }

@@ -75,10 +75,13 @@ public static class SceneWindow
 		if (selectedCrate.HasValue)
 		{
 			ReadOnlySpan<char> tooltip = Inline.Span($"""
+				Index: {selectedCrate.Value.Index}
+				Group index: {selectedCrate.Value.GroupIndex}
 				World position: {selectedCrate.Value.WorldPosition.X} {selectedCrate.Value.WorldPosition.Y} {selectedCrate.Value.WorldPosition.Z}
 				Local position: {selectedCrate.Value.LocalPositionX} {selectedCrate.Value.LocalPositionY} {selectedCrate.Value.LocalPositionZ}
 				Crate types: {selectedCrate.Value.CrateTypeA} {selectedCrate.Value.CrateTypeB} {selectedCrate.Value.CrateTypeC} {selectedCrate.Value.CrateTypeD}
-				Misc: {selectedCrate.Value.A} {selectedCrate.Value.F} {selectedCrate.Value.G} {selectedCrate.Value.H} {selectedCrate.Value.I} {selectedCrate.Value.J} {selectedCrate.Value.K} {selectedCrate.Value.L}
+				Exclamation crate index: {selectedCrate.Value.ExclamationCrateIndex}
+				Unknown: {selectedCrate.Value.A} {selectedCrate.Value.F} {selectedCrate.Value.G} {selectedCrate.Value.H} {selectedCrate.Value.I} {selectedCrate.Value.J} {selectedCrate.Value.K}
 				""");
 			ImGui.SetTooltip(tooltip);
 		}

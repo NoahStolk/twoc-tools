@@ -4,9 +4,12 @@
 	- Windows
 	- Linux
 - UI
-	- Initial window positions
+	- Initial window positions/configuration
+- Scene
+	- Click on crate to zoom towards it
+	- Render actual crate mesh + textures
 - Refactoring
-	- Refactor CrateDisplayWindow.UpdateState
+	- Refactor CrateDisplayWindow.UpdateState (Move state to LevelState?)
 - Features
 	- Level geometry viewer
 - Documentation
