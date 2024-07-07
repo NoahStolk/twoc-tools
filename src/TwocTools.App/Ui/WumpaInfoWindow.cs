@@ -5,11 +5,11 @@ using TwocTools.Core.DataTypes;
 
 namespace TwocTools.App.Ui;
 
-public static class WumpaDisplayWindow
+public static class WumpaInfoWindow
 {
 	public static void Render()
 	{
-		if (ImGui.Begin("Wumpa Display"))
+		if (ImGui.Begin("Wumpa Info"))
 		{
 			ImGui.Text(LevelState.WumpaCollectionPath);
 
@@ -19,7 +19,7 @@ public static class WumpaDisplayWindow
 
 			ImGui.Separator();
 
-			if (ImGui.BeginTable("WumpasTable", 1, ImGuiTableFlags.ScrollY))
+			if (ImGui.BeginTable("WumpaTable", 1, ImGuiTableFlags.ScrollY))
 			{
 				ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthStretch);
 

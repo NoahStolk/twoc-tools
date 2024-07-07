@@ -23,6 +23,6 @@ public static class LevelState
 		WumpaCollection = wumpaCollection;
 
 		// TODO: Refactor.
-		CrateDisplayWindow.UpdateState();
+		CrateInfoWindow.UpdateState();
 	}
 }

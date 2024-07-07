@@ -7,7 +7,7 @@ using TwocTools.Core.DataTypes;
 
 namespace TwocTools.App.Ui;
 
-public static unsafe class CrateDisplayWindow
+public static unsafe class CrateInfoWindow
 {
 	// Utilities
 	private static readonly List<CrateType> _allCrateTypes = Enum.GetValues<CrateType>().ToList();
@@ -26,7 +26,7 @@ public static unsafe class CrateDisplayWindow
 
 	public static void Render()
 	{
-		if (ImGui.Begin("Crate Display"))
+		if (ImGui.Begin("Crate Info"))
 		{
 			ImGui.Text(LevelState.CrateGroupCollectionPath);
 
