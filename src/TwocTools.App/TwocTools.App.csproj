@@ -16,4 +16,10 @@
     <PackageReference Include="NoahStolk.ImGuiGlfw" Version="0.7.0"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Content\**\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
