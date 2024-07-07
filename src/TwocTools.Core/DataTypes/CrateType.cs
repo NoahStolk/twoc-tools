@@ -18,7 +18,7 @@ public enum CrateType : byte
 	TimeTrialTwo = 11,
 	TimeTrialThree = 12,
 	Exclamation = 13,
-	Unknown14 = 14,
+	Unknown14 = 14, // Exclamation trigger?
 	Unknown15 = 15,
 	Nitro = 16,
 	NitroSwitch = 17,

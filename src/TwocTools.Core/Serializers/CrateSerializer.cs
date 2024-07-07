@@ -58,8 +58,25 @@ public static class CrateSerializer
 					l = reader.ReadInt16();
 				}
 
-				Crate crate = new(cratePosition, a, rotationX, rotationZ, rotationY, crateTypeA, crateTypeB, crateTypeC, crateTypeD, f, g, h, i, j, k, l);
-				crates.Add(crate);
+				crates.Add(new Crate(
+					index: crateOffset + crateIndex,
+					groupIndex: crateGroupIndex,
+					position: cratePosition,
+					a: a,
+					rotationX: rotationX,
+					rotationZ: rotationZ,
+					rotationY: rotationY,
+					crateTypeA: crateTypeA,
+					crateTypeB: crateTypeB,
+					crateTypeC: crateTypeC,
+					crateTypeD: crateTypeD,
+					f: f,
+					g: g,
+					h: h,
+					i: i,
+					j: j,
+					k: k,
+					l: l));
 			}
 
 			CrateGroup crateGroup = new(position, crateOffset, crateCount, tilt, crates);

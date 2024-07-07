@@ -5,6 +5,8 @@ namespace TwocTools.Core.DataTypes;
 public record struct Crate
 {
 	public Crate(
+		int index,
+		int groupIndex,
 		Vector3 position,
 		float a,
 		short rotationX,
@@ -22,6 +24,8 @@ public record struct Crate
 		short k,
 		short l)
 	{
+		Index = index;
+		GroupIndex = groupIndex;
 		Position = position;
 		A = a;
 		RotationX = rotationX;
@@ -39,6 +43,10 @@ public record struct Crate
 		K = k;
 		L = l;
 	}
+
+	public int Index { get; }
+
+	public int GroupIndex { get; }
 
 	public Vector3 Position { get; }
 

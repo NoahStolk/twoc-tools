@@ -1,10 +1,14 @@
-﻿- CI/CD
+﻿- App
+	- Icon
+- CI/CD
 	- Windows
 	- Linux
 - UI
 	- Initial window positions
 - Refactoring
 	- Refactor CrateDisplayWindow.UpdateState
+- Features
+	- Level geometry viewer
 - Documentation
 	- CRT format
 	- WMP format

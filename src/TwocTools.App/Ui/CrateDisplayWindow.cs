@@ -159,23 +159,25 @@ public static unsafe class CrateDisplayWindow
 
 	private static void RenderCratesTable()
 	{
-		const int columnCount = 14;
+		const int columnCount = 16;
 		if (ImGui.BeginTable("CratesTable", columnCount, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
 		{
-			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 240, 0);
-			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 1);
-			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthFixed, 120, 2);
-			ImGui.TableSetupColumn("Crate Type A", ImGuiTableColumnFlags.WidthFixed, 160, 3);
-			ImGui.TableSetupColumn("Crate Type B", ImGuiTableColumnFlags.WidthFixed, 160, 4);
-			ImGui.TableSetupColumn("Crate Type C", ImGuiTableColumnFlags.WidthFixed, 160, 5);
-			ImGui.TableSetupColumn("Crate Type D", ImGuiTableColumnFlags.WidthFixed, 160, 6);
-			ImGui.TableSetupColumn("F", ImGuiTableColumnFlags.WidthFixed, 40, 7);
-			ImGui.TableSetupColumn("G", ImGuiTableColumnFlags.WidthFixed, 40, 8);
-			ImGui.TableSetupColumn("H", ImGuiTableColumnFlags.WidthFixed, 40, 9);
-			ImGui.TableSetupColumn("I", ImGuiTableColumnFlags.WidthFixed, 40, 10);
-			ImGui.TableSetupColumn("J", ImGuiTableColumnFlags.WidthFixed, 40, 11);
-			ImGui.TableSetupColumn("K", ImGuiTableColumnFlags.WidthFixed, 40, 12);
-			ImGui.TableSetupColumn("L", ImGuiTableColumnFlags.WidthFixed, 40, 13);
+			ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 60, 0);
+			ImGui.TableSetupColumn("Group Index", ImGuiTableColumnFlags.WidthFixed, 80, 1);
+			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 240, 2);
+			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 3);
+			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthFixed, 120, 4);
+			ImGui.TableSetupColumn("Crate Type A", ImGuiTableColumnFlags.WidthFixed, 160, 5);
+			ImGui.TableSetupColumn("Crate Type B", ImGuiTableColumnFlags.WidthFixed, 160, 6);
+			ImGui.TableSetupColumn("Crate Type C", ImGuiTableColumnFlags.WidthFixed, 160, 7);
+			ImGui.TableSetupColumn("Crate Type D", ImGuiTableColumnFlags.WidthFixed, 160, 8);
+			ImGui.TableSetupColumn("F", ImGuiTableColumnFlags.WidthFixed, 40, 9);
+			ImGui.TableSetupColumn("G", ImGuiTableColumnFlags.WidthFixed, 40, 10);
+			ImGui.TableSetupColumn("H", ImGuiTableColumnFlags.WidthFixed, 40, 11);
+			ImGui.TableSetupColumn("I", ImGuiTableColumnFlags.WidthFixed, 40, 12);
+			ImGui.TableSetupColumn("J", ImGuiTableColumnFlags.WidthFixed, 40, 13);
+			ImGui.TableSetupColumn("K", ImGuiTableColumnFlags.WidthFixed, 40, 14);
+			ImGui.TableSetupColumn("L", ImGuiTableColumnFlags.WidthFixed, 40, 15);
 
 			ImGui.TableSetupScrollFreeze(0, 1);
 			ImGui.TableHeadersRow();
@@ -191,10 +193,10 @@ public static unsafe class CrateDisplayWindow
 
 				string? tooltip = i switch
 				{
-					3 => "The default crate type",
-					4 => "The crate type used for time trial",
-					5 => "For slot crates: The first option\nFor empty crates: The crate type that the empty crate will change into when the corresponding exclamation crate is triggered",
-					6 => "For slot crates: The second option",
+					5 => "The default crate type",
+					6 => "The crate type used for time trial",
+					7 => "For slot crates: The first option\nFor empty crates: The crate type that the empty crate will change into when the corresponding exclamation crate is triggered",
+					8 => "For slot crates: The second option",
 					_ => null,
 				};
 				if (tooltip != null)
@@ -209,7 +211,9 @@ public static unsafe class CrateDisplayWindow
 
 				Action sortAction = sorting switch
 				{
-					0 => () => _cratesVisualization.Sort((a, b) =>
+					0 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.Index.CompareTo(b.Index) : -a.Index.CompareTo(b.Index)),
+					1 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.GroupIndex.CompareTo(b.GroupIndex) : -a.GroupIndex.CompareTo(b.GroupIndex)),
+					2 => () => _cratesVisualization.Sort((a, b) =>
 					{
 						int result = a.Position.X.CompareTo(b.Position.X);
 						if (result == 0)
@@ -219,8 +223,8 @@ public static unsafe class CrateDisplayWindow
 
 						return sortAscending ? result : -result;
 					}),
-					1 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.A.CompareTo(b.A) : -a.A.CompareTo(b.A)),
-					2 => () => _cratesVisualization.Sort((a, b) =>
+					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.A.CompareTo(b.A) : -a.A.CompareTo(b.A)),
+					4 => () => _cratesVisualization.Sort((a, b) =>
 					{
 						int result = a.RotationX.CompareTo(b.RotationX);
 						if (result == 0)
@@ -230,17 +234,17 @@ public static unsafe class CrateDisplayWindow
 
 						return sortAscending ? result : -result;
 					}),
-					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeA.CompareTo(b.CrateTypeA) : -a.CrateTypeA.CompareTo(b.CrateTypeA)),
-					4 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeB.CompareTo(b.CrateTypeB) : -a.CrateTypeB.CompareTo(b.CrateTypeB)),
-					5 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeC.CompareTo(b.CrateTypeC) : -a.CrateTypeC.CompareTo(b.CrateTypeC)),
-					6 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeD.CompareTo(b.CrateTypeD) : -a.CrateTypeD.CompareTo(b.CrateTypeD)),
-					7 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.F.CompareTo(b.F) : -a.F.CompareTo(b.F)),
-					8 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.G.CompareTo(b.G) : -a.G.CompareTo(b.G)),
-					9 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.H.CompareTo(b.H) : -a.H.CompareTo(b.H)),
-					10 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.I.CompareTo(b.I) : -a.I.CompareTo(b.I)),
-					11 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.J.CompareTo(b.J) : -a.J.CompareTo(b.J)),
-					12 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.K.CompareTo(b.K) : -a.K.CompareTo(b.K)),
-					13 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.L.CompareTo(b.L) : -a.L.CompareTo(b.L)),
+					5 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeA.CompareTo(b.CrateTypeA) : -a.CrateTypeA.CompareTo(b.CrateTypeA)),
+					6 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeB.CompareTo(b.CrateTypeB) : -a.CrateTypeB.CompareTo(b.CrateTypeB)),
+					7 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeC.CompareTo(b.CrateTypeC) : -a.CrateTypeC.CompareTo(b.CrateTypeC)),
+					8 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeD.CompareTo(b.CrateTypeD) : -a.CrateTypeD.CompareTo(b.CrateTypeD)),
+					9 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.F.CompareTo(b.F) : -a.F.CompareTo(b.F)),
+					10 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.G.CompareTo(b.G) : -a.G.CompareTo(b.G)),
+					11 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.H.CompareTo(b.H) : -a.H.CompareTo(b.H)),
+					12 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.I.CompareTo(b.I) : -a.I.CompareTo(b.I)),
+					13 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.J.CompareTo(b.J) : -a.J.CompareTo(b.J)),
+					14 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.K.CompareTo(b.K) : -a.K.CompareTo(b.K)),
+					15 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.L.CompareTo(b.L) : -a.L.CompareTo(b.L)),
 					_ => static () => { },
 				};
 				sortAction();
@@ -254,6 +258,8 @@ public static unsafe class CrateDisplayWindow
 			{
 				ImGui.TableNextRow();
 
+				TableNextColumnText(Inline.Span(crate.Index));
+				TableNextColumnText(Inline.Span(crate.GroupIndex));
 				TableNextColumnText(Inline.Span(crate.Position));
 				TableNextColumnText(Inline.Span(crate.A), crate.A is > -float.Epsilon and < float.Epsilon ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Span($"{crate.RotationX}, {crate.RotationY}, {crate.RotationZ}"));
