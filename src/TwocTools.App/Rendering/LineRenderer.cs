@@ -1,5 +1,4 @@
 ﻿using Detach.Numerics;
-using Detach.Utils;
 using Silk.NET.OpenGL;
 using System.Numerics;
 using TwocTools.App.Extensions;
@@ -128,8 +127,7 @@ public sealed class LineRenderer
 			{
 				Crate crate = crateGroup[i];
 
-				float tiltInRadians = (float)(crateGroup.Tilt * (2 * Math.PI / 65536f));
-				Matrix4x4 rotationMatrix = Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, tiltInRadians);
+				Matrix4x4 rotationMatrix = Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, crateGroup.TiltInRadians);
 
 				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * rotationMatrix * Matrix4x4.CreateTranslation(crate.WorldPosition * new Vector3(-1, 1, 1)));
 				Gl.Uniform4(_colorUniform, crate.CrateTypeA.GetColor());

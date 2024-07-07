@@ -57,9 +57,12 @@ public static class SceneWindow
 		Crate? selectedCrate = null;
 		foreach (CrateGroup crateGroup in LevelState.CrateGroupCollection)
 		{
-			foreach (Crate crate in crateGroup)
+			for (int i = 0; i < crateGroup.Count; i++)
 			{
-				Obb obb = new(crate.WorldPosition * new Vector3(-1, 1, 1), new Vector3(0.25f), Matrix3.Identity); // TODO: Orientation.
+				Crate crate = crateGroup[i];
+
+				Matrix3 rotation = Matrix3.RotationY(crateGroup.TiltInRadians);
+				Obb obb = new(crate.WorldPosition * new Vector3(-1, 1, 1), new Vector3(0.25f), rotation);
 
 				if (Geometry3D.Raycast(obb, ray, out RaycastResult raycastResult) && raycastResult.Distance < closestDistance)
 				{
