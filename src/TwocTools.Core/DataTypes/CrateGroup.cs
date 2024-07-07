@@ -26,6 +26,8 @@ public record CrateGroup : IEnumerable<Crate>
 
 	public int Count => _crates.Count;
 
+	public float TiltInRadians => (float)(Tilt * (2 * Math.PI / 65536f));
+
 	public Crate this[int index] => _crates[index];
 
 	public IEnumerator<Crate> GetEnumerator()

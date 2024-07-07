@@ -164,9 +164,9 @@ public static unsafe class CrateInfoWindow
 		{
 			ImGui.TableSetupColumn("Index", ImGuiTableColumnFlags.WidthFixed, 60, 0);
 			ImGui.TableSetupColumn("Group Index", ImGuiTableColumnFlags.WidthFixed, 80, 1);
-			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 240, 2);
+			ImGui.TableSetupColumn("World Position", ImGuiTableColumnFlags.WidthFixed, 240, 2);
 			ImGui.TableSetupColumn("A", ImGuiTableColumnFlags.WidthFixed, 40, 3);
-			ImGui.TableSetupColumn("Rotation", ImGuiTableColumnFlags.WidthFixed, 120, 4);
+			ImGui.TableSetupColumn("Local Position", ImGuiTableColumnFlags.WidthFixed, 120, 4);
 			ImGui.TableSetupColumn("Crate Type A", ImGuiTableColumnFlags.WidthFixed, 160, 5);
 			ImGui.TableSetupColumn("Crate Type B", ImGuiTableColumnFlags.WidthFixed, 160, 6);
 			ImGui.TableSetupColumn("Crate Type C", ImGuiTableColumnFlags.WidthFixed, 160, 7);
@@ -215,22 +215,22 @@ public static unsafe class CrateInfoWindow
 					1 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.GroupIndex.CompareTo(b.GroupIndex) : -a.GroupIndex.CompareTo(b.GroupIndex)),
 					2 => () => _cratesVisualization.Sort((a, b) =>
 					{
-						int result = a.Position.X.CompareTo(b.Position.X);
+						int result = a.WorldPosition.X.CompareTo(b.WorldPosition.X);
 						if (result == 0)
-							result = a.Position.Y.CompareTo(b.Position.Y);
+							result = a.WorldPosition.Y.CompareTo(b.WorldPosition.Y);
 						if (result == 0)
-							result = a.Position.Z.CompareTo(b.Position.Z);
+							result = a.WorldPosition.Z.CompareTo(b.WorldPosition.Z);
 
 						return sortAscending ? result : -result;
 					}),
 					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.A.CompareTo(b.A) : -a.A.CompareTo(b.A)),
 					4 => () => _cratesVisualization.Sort((a, b) =>
 					{
-						int result = a.RotationX.CompareTo(b.RotationX);
+						int result = a.LocalPositionX.CompareTo(b.LocalPositionX);
 						if (result == 0)
-							result = a.RotationY.CompareTo(b.RotationY);
+							result = a.LocalPositionY.CompareTo(b.LocalPositionY);
 						if (result == 0)
-							result = a.RotationZ.CompareTo(b.RotationZ);
+							result = a.LocalPositionZ.CompareTo(b.LocalPositionZ);
 
 						return sortAscending ? result : -result;
 					}),
@@ -260,9 +260,9 @@ public static unsafe class CrateInfoWindow
 
 				TableNextColumnText(Inline.Span(crate.Index));
 				TableNextColumnText(Inline.Span(crate.GroupIndex));
-				TableNextColumnText(Inline.Span(crate.Position));
+				TableNextColumnText(Inline.Span(crate.WorldPosition));
 				TableNextColumnText(Inline.Span(crate.A), crate.A is > -float.Epsilon and < float.Epsilon ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span($"{crate.RotationX}, {crate.RotationY}, {crate.RotationZ}"));
+				TableNextColumnText(Inline.Span($"{crate.LocalPositionX}, {crate.LocalPositionY}, {crate.LocalPositionZ}"));
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeA], crate.CrateTypeA.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeB], crate.CrateTypeB.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeC], crate.CrateTypeC.GetColor());

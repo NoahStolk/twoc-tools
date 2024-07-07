@@ -17,6 +17,8 @@ public sealed class Application
 
 	private readonly ImGuiController _imGuiController;
 
+	private static Application? _instance;
+
 	private double _currentTime = Graphics.Glfw.GetTime();
 	private double _accumulator;
 	private double _frameTime;
@@ -24,6 +26,20 @@ public sealed class Application
 	public Application(ImGuiController imGuiController)
 	{
 		_imGuiController = imGuiController;
+	}
+
+	public float FrameTime => (float)_frameTime;
+
+	public static Application Instance
+	{
+		get => _instance ?? throw new InvalidOperationException("Application instance not set.");
+		set
+		{
+			if (_instance != null)
+				throw new InvalidOperationException("Application instance already set.");
+
+			_instance = value;
+		}
 	}
 
 	public unsafe void Run()
@@ -72,6 +88,7 @@ public sealed class Application
 		LevelImportWindow.Render();
 		CrateInfoWindow.Render();
 		WumpaInfoWindow.Render();
+		SceneWindow.Render();
 
 		_imGuiController.Render();
 

@@ -27,4 +27,5 @@ Graphics.OnChangeWindowSize = (w, h) =>
 };
 
 Application application = new(imGuiController);
+Application.Instance = application;
 application.Run();
