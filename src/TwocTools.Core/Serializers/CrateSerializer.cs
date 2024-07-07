@@ -35,15 +35,15 @@ public static class CrateSerializer
 				short localPositionX = reader.ReadInt16();
 				short localPositionY = reader.ReadInt16();
 				short localPositionZ = reader.ReadInt16();
-				CrateType crateTypeA = (CrateType)reader.ReadByte();
-				CrateType crateTypeB = CrateType.Unknown255;
-				CrateType crateTypeC = CrateType.Unknown255;
-				CrateType crateTypeD = CrateType.Unknown255;
+				CrateType crateTypeA = (CrateType)reader.ReadSByte();
+				CrateType crateTypeB = CrateType.None;
+				CrateType crateTypeC = CrateType.None;
+				CrateType crateTypeD = CrateType.None;
 				if (version >= 3)
 				{
-					crateTypeB = (CrateType)reader.ReadByte();
-					crateTypeC = (CrateType)reader.ReadByte();
-					crateTypeD = (CrateType)reader.ReadByte();
+					crateTypeB = (CrateType)reader.ReadSByte();
+					crateTypeC = (CrateType)reader.ReadSByte();
+					crateTypeD = (CrateType)reader.ReadSByte();
 				}
 
 				short f = reader.ReadInt16();
