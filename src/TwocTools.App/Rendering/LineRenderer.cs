@@ -1,4 +1,5 @@
-﻿using Silk.NET.OpenGL;
+﻿using Detach.Numerics;
+using Silk.NET.OpenGL;
 using System.Numerics;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
@@ -12,36 +13,10 @@ public sealed class LineRenderer
 	private static readonly uint _lineVao = VaoUtils.CreateLineVao([Vector3.Zero, Vector3.UnitZ]);
 	private static readonly uint _centeredLineVao = VaoUtils.CreateLineVao([-Vector3.UnitZ, Vector3.UnitZ]);
 
-	private static readonly uint _cubeVao = VaoUtils.CreateLineVao([
-		new Vector3(-0.5f, -0.5f, -0.5f),
-		new Vector3(-0.5f, -0.5f, 0.5f),
-		new Vector3(-0.5f, 0.5f, -0.5f),
-		new Vector3(-0.5f, 0.5f, 0.5f),
-		new Vector3(0.5f, -0.5f, -0.5f),
-		new Vector3(0.5f, -0.5f, 0.5f),
-		new Vector3(0.5f, 0.5f, -0.5f),
-		new Vector3(0.5f, 0.5f, 0.5f),
+	private static readonly Vector3[] _cubeVertices = VertexUtils.GetCubeVertexPositions();
+	private static readonly uint _cubeVao = VaoUtils.CreateLineVao(_cubeVertices);
 
-		new Vector3(-0.5f, -0.5f, -0.5f),
-		new Vector3(-0.5f, 0.5f, -0.5f),
-		new Vector3(-0.5f, -0.5f, 0.5f),
-		new Vector3(-0.5f, 0.5f, 0.5f),
-		new Vector3(0.5f, -0.5f, -0.5f),
-		new Vector3(0.5f, 0.5f, -0.5f),
-		new Vector3(0.5f, -0.5f, 0.5f),
-		new Vector3(0.5f, 0.5f, 0.5f),
-
-		new Vector3(-0.5f, -0.5f, -0.5f),
-		new Vector3(0.5f, -0.5f, -0.5f),
-		new Vector3(-0.5f, -0.5f, 0.5f),
-		new Vector3(0.5f, -0.5f, 0.5f),
-		new Vector3(-0.5f, 0.5f, -0.5f),
-		new Vector3(0.5f, 0.5f, -0.5f),
-		new Vector3(-0.5f, 0.5f, 0.5f),
-		new Vector3(0.5f, 0.5f, 0.5f),
-	]);
-
-	private static readonly Vector3[] _sphereVertices = VertexUtils.GetSphereVertexPositions(8, 16, 1);
+	private static readonly Vector3[] _sphereVertices = VertexUtils.GetSphereVertexPositions(4, 8, 1);
 	private static readonly uint _sphereVao = VaoUtils.CreateLineVao(_sphereVertices);
 
 	private readonly Shader _lineShader;
@@ -76,6 +51,10 @@ public sealed class LineRenderer
 		Gl.BindVertexArray(_cubeVao);
 		Gl.LineWidth(4);
 		RenderCrates();
+
+		Gl.BindVertexArray(_sphereVao);
+		Gl.LineWidth(1);
+		RenderWumpa();
 	}
 
 	private void RenderLine(Matrix4x4 modelMatrix, Vector4 color)
@@ -148,8 +127,19 @@ public sealed class LineRenderer
 			{
 				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(crate.Position * new Vector3(-1, 1, 1)));
 				Gl.Uniform4(_colorUniform, crate.CrateTypeA.GetColor());
-				Gl.DrawArrays(PrimitiveType.Lines, 0, 24);
+				Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_cubeVertices.Length);
 			}
+		}
+	}
+
+	private void RenderWumpa()
+	{
+		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(0.25f);
+		foreach (Wumpa wumpa in LevelState.WumpaCollection)
+		{
+			Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(wumpa.Position * new Vector3(-1, 1, 1)));
+			Gl.Uniform4(_colorUniform, Rgba.Orange with { A = 160 });
+			Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_sphereVertices.Length);
 		}
 	}
 }

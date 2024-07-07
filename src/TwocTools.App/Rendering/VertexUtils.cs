@@ -4,6 +4,39 @@ namespace TwocTools.App.Rendering;
 
 public static class VertexUtils
 {
+	public static Vector3[] GetCubeVertexPositions()
+	{
+		return
+		[
+			new Vector3(-0.5f, -0.5f, -0.5f),
+			new Vector3(-0.5f, -0.5f, 0.5f),
+			new Vector3(-0.5f, 0.5f, -0.5f),
+			new Vector3(-0.5f, 0.5f, 0.5f),
+			new Vector3(0.5f, -0.5f, -0.5f),
+			new Vector3(0.5f, -0.5f, 0.5f),
+			new Vector3(0.5f, 0.5f, -0.5f),
+			new Vector3(0.5f, 0.5f, 0.5f),
+
+			new Vector3(-0.5f, -0.5f, -0.5f),
+			new Vector3(-0.5f, 0.5f, -0.5f),
+			new Vector3(-0.5f, -0.5f, 0.5f),
+			new Vector3(-0.5f, 0.5f, 0.5f),
+			new Vector3(0.5f, -0.5f, -0.5f),
+			new Vector3(0.5f, 0.5f, -0.5f),
+			new Vector3(0.5f, -0.5f, 0.5f),
+			new Vector3(0.5f, 0.5f, 0.5f),
+
+			new Vector3(-0.5f, -0.5f, -0.5f),
+			new Vector3(0.5f, -0.5f, -0.5f),
+			new Vector3(-0.5f, -0.5f, 0.5f),
+			new Vector3(0.5f, -0.5f, 0.5f),
+			new Vector3(-0.5f, 0.5f, -0.5f),
+			new Vector3(0.5f, 0.5f, -0.5f),
+			new Vector3(-0.5f, 0.5f, 0.5f),
+			new Vector3(0.5f, 0.5f, 0.5f),
+		];
+	}
+
 	public static Vector3[] GetSphereVertexPositions(uint horizontalLines, uint verticalLines, float radius)
 	{
 		List<Vector3> vertices = [];
