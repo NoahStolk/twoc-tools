@@ -1,11 +1,9 @@
 ﻿using Detach;
 using ImGuiNET;
-using NativeFileDialogSharp;
 using System.Numerics;
 using TwocTools.App.Extensions;
-using TwocTools.Core;
+using TwocTools.App.State;
 using TwocTools.Core.DataTypes;
-using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;
 
@@ -15,76 +13,47 @@ public static class CrateDisplayWindow
 	private static readonly List<CrateType> _allCrateTypes = Enum.GetValues<CrateType>().ToList();
 	private static readonly Dictionary<CrateType, string> _crateTypeNames = _allCrateTypes.ToDictionary(t => t, t => t.ToString());
 
-	// State
-	private static CrateGroupCollection _crateGroupCollection = CrateGroupCollection.Empty;
-	private static Endianness _endianness = Endianness.Little;
-
 	// Visualization created from state (used for sorting, etc.)
 	private static List<CrateGroup> _crateGroupVisualization = [];
 	private static List<Crate> _cratesVisualization = [];
 
-	private static void LoadCrates()
+	// TODO: Refactor to event handler or something.
+	public static void UpdateState()
 	{
-		DialogResult dialogResult = Dialog.FileOpen("crt,CRT");
-		if (!dialogResult.IsOk)
-			return;
-
-		using FileStream fs = File.OpenRead(dialogResult.Path);
-		_crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
-		_crateGroupVisualization = _crateGroupCollection.ToList();
-		_cratesVisualization = _crateGroupCollection.SelectMany(c => c).ToList();
+		_crateGroupVisualization = LevelState.CrateGroupCollection.ToList();
+		_cratesVisualization = LevelState.CrateGroupCollection.SelectMany(c => c).ToList();
 	}
 
-	private static void LoadCratesFromDirectory()
-	{
-		DialogResult dialogResult = Dialog.FolderPicker();
-		if (!dialogResult.IsOk)
-			return;
-
-		_crateGroupCollection = CrateGroupCollection.Empty;
-		_crateGroupVisualization = [];
-		_cratesVisualization = [];
-
-		foreach (string crtPath in Directory.GetFiles(dialogResult.Path, "*.crt", SearchOption.AllDirectories))
-		{
-			using FileStream fs = File.OpenRead(crtPath);
-			CrateGroupCollection crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
-			_cratesVisualization.AddRange(crateGroupCollection.SelectMany(c => c));
-		}
-	}
+	// private static void LoadCratesFromDirectory()
+	// {
+	// 	DialogResult dialogResult = Dialog.FolderPicker();
+	// 	if (!dialogResult.IsOk)
+	// 		return;
+	//
+	// 	_crateGroupCollection = CrateGroupCollection.Empty;
+	// 	_crateGroupVisualization = [];
+	// 	_cratesVisualization = [];
+	//
+	// 	foreach (string crtPath in Directory.GetFiles(dialogResult.Path, "*.crt", SearchOption.AllDirectories))
+	// 	{
+	// 		using FileStream fs = File.OpenRead(crtPath);
+	// 		CrateGroupCollection crateGroupCollection = CrateSerializer.Deserialize(fs, _endianness);
+	// 		_cratesVisualization.AddRange(crateGroupCollection.SelectMany(c => c));
+	// 	}
+	// }
 
 	public static void Render()
 	{
 		if (ImGui.Begin("Crate Display"))
 		{
-			if (ImGui.BeginCombo("Endianness", _endianness.ToString()))
-			{
-				foreach (Endianness endianness in Enum.GetValues<Endianness>())
-				{
-					bool isSelected = _endianness == endianness;
-					if (ImGui.Selectable(endianness.ToString(), isSelected))
-						_endianness = endianness;
-					if (isSelected)
-						ImGui.SetItemDefaultFocus();
-				}
-
-				ImGui.EndCombo();
-			}
-
-			if (ImGui.Button("Load Crate (.crt) file"))
-				LoadCrates();
-
-			if (ImGui.Button("Load all Crate files from directory"))
-				LoadCratesFromDirectory();
-
 			ImGui.Separator();
 
 			if (ImGui.BeginTabBar("CrateDisplayTabBar"))
 			{
 				if (ImGui.BeginTabItem("Info"))
 				{
-					ImGui.Text(Inline.Span($"Version: {_crateGroupCollection.Version}"));
-					ImGui.Text(Inline.Span($"Crate group count: {_crateGroupCollection.Count}"));
+					ImGui.Text(Inline.Span($"Version: {LevelState.CrateGroupCollection.Version}"));
+					ImGui.Text(Inline.Span($"Crate group count: {LevelState.CrateGroupCollection.Count}"));
 					ImGui.Text(Inline.Span($"Crate count: {_cratesVisualization.Count}"));
 
 					ImGui.EndTabItem();

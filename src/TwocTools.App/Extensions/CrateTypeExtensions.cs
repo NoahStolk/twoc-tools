@@ -25,6 +25,8 @@ public static class CrateTypeExtensions
 			CrateType.Exclamation => new Rgb(191, 191, 255),
 			CrateType.Nitro => Rgb.Green,
 			CrateType.NitroSwitch => new Rgb(0, 191, 0),
+			CrateType.Locked => new Rgb(160, 160, 255),
+			CrateType.Invincibility => new Rgb(191, 191, 127),
 			_ => Rgb.White,
 		};
 	}

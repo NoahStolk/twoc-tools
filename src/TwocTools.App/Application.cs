@@ -69,6 +69,7 @@ public sealed class Application
 
 		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+		LevelImportWindow.Render();
 		CrateDisplayWindow.Render();
 		WumpaDisplayWindow.Render();
 
