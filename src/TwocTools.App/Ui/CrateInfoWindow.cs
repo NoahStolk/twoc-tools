@@ -3,7 +3,9 @@ using ImGuiNET;
 using System.Numerics;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
+using TwocTools.Core;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;
 
@@ -105,12 +107,14 @@ public static unsafe class CrateInfoWindow
 
 	private static void RenderCrateGroupsTable()
 	{
-		if (ImGui.BeginTable("CrateGroupsTable", 14, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
+		if (ImGui.BeginTable("CrateGroupsTable", 6, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
 		{
 			ImGui.TableSetupColumn("Position", ImGuiTableColumnFlags.WidthFixed, 280, 0);
 			ImGui.TableSetupColumn("Crate Offset", ImGuiTableColumnFlags.WidthFixed, 120, 1);
 			ImGui.TableSetupColumn("Crate Count", ImGuiTableColumnFlags.WidthFixed, 120, 2);
-			ImGui.TableSetupColumn("Tilt", ImGuiTableColumnFlags.WidthFixed, 40, 3);
+			ImGui.TableSetupColumn("Tilt (Raw)", ImGuiTableColumnFlags.WidthFixed, 120, 3);
+			ImGui.TableSetupColumn("Tilt (Radians)", ImGuiTableColumnFlags.WidthFixed, 120, 4);
+			ImGui.TableSetupColumn("Tilt (Degrees)", ImGuiTableColumnFlags.WidthFixed, 120, 5);
 
 			ImGui.TableSetupScrollFreeze(0, 1);
 			ImGui.TableHeadersRow();
@@ -136,6 +140,8 @@ public static unsafe class CrateInfoWindow
 					1 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.CrateOffset.CompareTo(b.CrateOffset) : -a.CrateOffset.CompareTo(b.CrateOffset)),
 					2 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.CrateCount.CompareTo(b.CrateCount) : -a.CrateCount.CompareTo(b.CrateCount)),
 					3 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.Tilt.CompareTo(b.Tilt) : -a.Tilt.CompareTo(b.Tilt)),
+					4 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.TiltInRadians.CompareTo(b.TiltInRadians) : -a.TiltInRadians.CompareTo(b.TiltInRadians)),
+					5 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.TiltInDegrees.CompareTo(b.TiltInDegrees) : -a.TiltInDegrees.CompareTo(b.TiltInDegrees)),
 					_ => static () => { },
 				};
 				sortAction();
@@ -151,6 +157,8 @@ public static unsafe class CrateInfoWindow
 				TableNextColumnText(Inline.Span(crateGroup.CrateOffset));
 				TableNextColumnText(Inline.Span(crateGroup.CrateCount));
 				TableNextColumnText(Inline.Span(crateGroup.Tilt));
+				TableNextColumnText(Inline.Span(crateGroup.TiltInRadians));
+				TableNextColumnText(Inline.Span(crateGroup.TiltInDegrees));
 			}
 
 			ImGui.EndTable();
