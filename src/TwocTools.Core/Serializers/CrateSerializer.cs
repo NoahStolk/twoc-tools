@@ -30,7 +30,7 @@ public static class CrateSerializer
 			List<Crate> crates = new(crateCount);
 			for (int crateIndex = 0; crateIndex < crateCount; crateIndex++)
 			{
-				Vector3 cratePosition = reader.ReadVector3();
+				Vector3 worldPosition = reader.ReadVector3();
 				float a = reader.ReadSingle();
 				short localPositionX = reader.ReadInt16();
 				short localPositionY = reader.ReadInt16();
@@ -61,7 +61,7 @@ public static class CrateSerializer
 				crates.Add(new Crate(
 					index: crateOffset + crateIndex,
 					groupIndex: crateGroupIndex,
-					worldPosition: cratePosition,
+					worldPosition: worldPosition,
 					a: a,
 					localPositionX: localPositionX,
 					localPositionY: localPositionY,
