@@ -13,7 +13,7 @@ Crate files are the files that contain the data for all the crates in a level. T
 | Name           | Data type | Notes                                                                                                                                                                     |
 |----------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | World position | `f32 x3`  | Origin position in world space.                                                                                                                                           |
-| Crate offset   | `u16`     | Index offset of the first crate; if the previous 2 crate groups both contained 10 crates, this value will be 20 for the third group.                                      |
+| Crate offset   | `u16`     | Index offset of the first crate; if the first 2 crate groups both contain 10 crates, this value will be 20 for the third group.                                           |
 | Crate count    | `u16`     | Amount of crates in this group.                                                                                                                                           |
 | Tilt           | `u16`     | Tilt of the crate group encoded as a 16-bit integer. This is a rotation around the Y axis. To convert the value to degrees, multiply it by 0.0054931640625 (360 / 65536). |
 | Crates         | `Crate[]` | List of crates in this group.                                                                                                                                             |
@@ -23,7 +23,7 @@ Crate files are the files that contain the data for all the crates in a level. T
 | Name                    | Data type     | Notes                                                                                                                                                            |
 |-------------------------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | World position          | `f32 x3`      | Origin position in world space (not affected by crate group position).                                                                                           |
-| ?                       | `f32`         | Unused; this value is always 0. (It might be the 4th component of the world position (translation part of a transformation matrix).                              |
+| ?                       | `f32`         | Unused; this value is always 0. It might be the 4th component of the world position (translation part of a transformation matrix).                               |
 | Local position          | `s16 x3`      | Local position of the crate, compared to the crate group origin position.                                                                                        |
 | Crate type A            | `CrateType`   | The default crate type.                                                                                                                                          |
 | Crate type B            | `CrateType`   | The crate type used for time trial.                                                                                                                              |
