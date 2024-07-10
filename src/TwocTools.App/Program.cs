@@ -10,7 +10,7 @@ const int windowHeightMin = 768;
 const int windowWidthMax = 4096;
 const int windowHeightMax = 2160;
 
-Graphics.CreateWindow(new Graphics.WindowState("twoc-tools", windowWidth, windowHeight, false));
+Graphics.CreateWindow(new Graphics.WindowState("TWOC Tools - Tools for Crash Bandicoot: The Wrath of Cortex", windowWidth, windowHeight, false));
 Graphics.SetWindowSizeLimits(windowWidthMin, windowHeightMin, windowWidthMax, windowHeightMax);
 
 ImGuiController imGuiController = new(Graphics.Gl, Input.GlfwInput, windowWidth, windowHeight);

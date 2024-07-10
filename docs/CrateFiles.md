@@ -39,7 +39,7 @@ Crate files are the files that contain the data for all the crates in a level. T
 
 ### Crate Types
 
-Crate types are 1 byte in size. Note that type 18 does not exist.
+Crate types are 1 byte in size. Note that type 18 does not appear in the game.
 
 | Value | Value (hex) | Type             |
 |-------|-------------|------------------|
@@ -62,5 +62,6 @@ Crate types are 1 byte in size. Note that type 18 does not exist.
 | 15    | `0x0F`      | Iron             |
 | 16    | `0x10`      | Nitro            |
 | 17    | `0x11`      | Nitro Switch     |
+| 18    | `0x12`      | Proximity?       |
 | 19    | `0x13`      | Locked           |
 | 20    | `0x14`      | Invincibility    |

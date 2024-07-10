@@ -23,6 +23,7 @@ public enum CrateType : sbyte
 	Iron = 15,
 	Nitro = 16,
 	NitroSwitch = 17,
+	Proximity = 18,
 	Locked = 19,
 	Invincibility = 20,
 }
