@@ -20,22 +20,22 @@ Crate files are the files that contain the data for all the crates in a level. T
 
 ### Crate
 
-| Name                    | Data type     | Notes                                                                                                                                                            |
-|-------------------------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| World position          | `f32 x3`      | Origin position in world space (not affected by crate group position).                                                                                           |
-| ?                       | `f32`         | Unused; this value is always 0. It might be the 4th component of the world position (translation part of a transformation matrix).                               |
-| Local position          | `s16 x3`      | Local position of the crate, compared to the crate group origin position.                                                                                        |
-| Crate type A            | `CrateType`   | The default crate type.                                                                                                                                          |
-| Crate type B            | `CrateType`   | The crate type used for time trial.                                                                                                                              |
-| Crate type C            | `CrateType`   | For slot crates: The first option. For empty crates: The crate type that the empty crate will change into when the corresponding exclamation crate is triggered. |
-| Crate type D            | `CrateType`   | For slot crates: The second option.                                                                                                                              |
-| ?                       | `u16` / `s16` | ?                                                                                                                                                                |
-| ?                       | `u16` / `s16` | ?                                                                                                                                                                |
-| ?                       | `u16` / `s16` | ?                                                                                                                                                                |
-| ?                       | `u16` / `s16` | ?                                                                                                                                                                |
-| ?                       | `u16` / `s16` | ?                                                                                                                                                                |
-| ?                       | `u16` / `s16` | ?                                                                                                                                                                |
-| Exclamation crate index | `u16`         | For empty crates: The index of the exclamation crate that will change the empty crate into crate type C.                                                         |
+| Name                    | Data type   | Notes                                                                                                                                                            |
+|-------------------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| World position          | `f32 x3`    | Origin position in world space (not affected by crate group position).                                                                                           |
+| ?                       | `f32`       | Unused; this value is always 0. It might be the 4th component of the world position (translation part of a transformation matrix).                               |
+| Local position          | `s16 x3`    | Local position of the crate, compared to the crate group origin position.                                                                                        |
+| Crate type A            | `CrateType` | The default crate type.                                                                                                                                          |
+| Crate type B            | `CrateType` | The crate type used for time trial.                                                                                                                              |
+| Crate type C            | `CrateType` | For slot crates: The first option. For empty crates: The crate type that the empty crate will change into when the corresponding exclamation crate is triggered. |
+| Crate type D            | `CrateType` | For slot crates: The second option.                                                                                                                              |
+| ?                       | `u16`       | Some sort of crate index. These values are sometimes -1, but otherwise never exceed the amount of crates in a level.                                             |
+| ?                       | `u16`       | Same as above.                                                                                                                                                   |
+| ?                       | `u16`       | Same as above.                                                                                                                                                   |
+| ?                       | `u16`       | Same as above.                                                                                                                                                   |
+| ?                       | `u16`       | Same as above.                                                                                                                                                   |
+| ?                       | `u16`       | Same as above.                                                                                                                                                   |
+| Exclamation crate index | `u16`       | For empty crates: The index of the exclamation crate that will change the empty crate into crate type C.                                                         |
 
 ### Crate Types
 
