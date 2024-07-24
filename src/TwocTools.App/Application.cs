@@ -1,6 +1,7 @@
 ﻿using ImGuiGlfw;
 using ImGuiNET;
 using Silk.NET.OpenGL;
+using TwocTools.App.State;
 using TwocTools.App.Ui;
 
 namespace TwocTools.App;
@@ -85,10 +86,17 @@ public sealed class Application
 
 		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		LevelImportWindow.Render();
-		CrateInfoWindow.Render();
-		WumpaInfoWindow.Render();
-		SceneWindow.Render();
+		if (GameState.IsValid)
+		{
+			LevelSelectWindow.Render();
+			CrateInfoWindow.Render();
+			WumpaInfoWindow.Render();
+			SceneWindow.Render();
+		}
+		else
+		{
+			GameSelectWindow.Render();
+		}
 
 		_imGuiController.Render();
 
