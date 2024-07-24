@@ -1,4 +1,5 @@
-﻿using Detach.Numerics;
+﻿using Detach.Extensions;
+using Detach.Numerics;
 using Silk.NET.OpenGL;
 using System.Numerics;
 using TwocTools.App.Extensions;
@@ -42,7 +43,7 @@ public sealed class LineRenderer
 
 		Gl.BindVertexArray(_lineVao);
 		RenderOrigin();
-		RenderGrid(Vector3.Zero, new Vector4(1, 1, 1, 0.25f), 64, 1);
+		RenderGrid(Camera3d.Position.Round(0) with { Y = 0 }, new Vector4(1, 1, 1, 0.25f), 64, 1);
 
 		Gl.BindVertexArray(_centeredLineVao);
 		Gl.LineWidth(1);

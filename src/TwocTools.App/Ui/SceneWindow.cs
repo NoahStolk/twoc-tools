@@ -81,7 +81,13 @@ public static class SceneWindow
 				Local position: {selectedCrate.Value.LocalPositionX} {selectedCrate.Value.LocalPositionY} {selectedCrate.Value.LocalPositionZ}
 				Crate types: {selectedCrate.Value.CrateTypeA} {selectedCrate.Value.CrateTypeB} {selectedCrate.Value.CrateTypeC} {selectedCrate.Value.CrateTypeD}
 				Exclamation crate index: {selectedCrate.Value.ExclamationCrateIndex}
-				Unknown: {selectedCrate.Value.A} {selectedCrate.Value.F} {selectedCrate.Value.G} {selectedCrate.Value.H} {selectedCrate.Value.I} {selectedCrate.Value.J} {selectedCrate.Value.K}
+				Neighboring crate indices:
+					Up:       {selectedCrate.Value.F}
+					Down:     {selectedCrate.Value.G}
+					Forward:  {selectedCrate.Value.H}
+					Backward: {selectedCrate.Value.I}
+					Left:     {selectedCrate.Value.J}
+					Right:    {selectedCrate.Value.K}
 				""");
 			ImGui.SetTooltip(tooltip);
 		}

@@ -81,14 +81,18 @@ public record struct Crate
 	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
 	public CrateType CrateTypeD { get; }
 
+	// TODO: Figure out which is which exactly. Some data in the game doesn't appear to be correct, so these values might just be unused.
+	// Y
 	public short F { get; }
 
 	public short G { get; }
 
+	// Z
 	public short H { get; }
 
 	public short I { get; }
 
+	// X
 	public short J { get; }
 
 	public short K { get; }

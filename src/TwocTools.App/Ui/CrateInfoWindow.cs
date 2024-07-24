@@ -179,12 +179,12 @@ public static unsafe class CrateInfoWindow
 			ImGui.TableSetupColumn("Type B", ImGuiTableColumnFlags.WidthFixed, 96, 6);
 			ImGui.TableSetupColumn("Type C", ImGuiTableColumnFlags.WidthFixed, 96, 7);
 			ImGui.TableSetupColumn("Type D", ImGuiTableColumnFlags.WidthFixed, 96, 8);
-			ImGui.TableSetupColumn("F", ImGuiTableColumnFlags.WidthFixed, 40, 9);
-			ImGui.TableSetupColumn("G", ImGuiTableColumnFlags.WidthFixed, 40, 10);
-			ImGui.TableSetupColumn("H", ImGuiTableColumnFlags.WidthFixed, 40, 11);
-			ImGui.TableSetupColumn("I", ImGuiTableColumnFlags.WidthFixed, 40, 12);
-			ImGui.TableSetupColumn("J", ImGuiTableColumnFlags.WidthFixed, 40, 13);
-			ImGui.TableSetupColumn("K", ImGuiTableColumnFlags.WidthFixed, 40, 14);
+			ImGui.TableSetupColumn("Neighbor Y+", ImGuiTableColumnFlags.WidthFixed, 40, 9);
+			ImGui.TableSetupColumn("Neighbor Y-", ImGuiTableColumnFlags.WidthFixed, 40, 10);
+			ImGui.TableSetupColumn("Neighbor Z+", ImGuiTableColumnFlags.WidthFixed, 40, 11);
+			ImGui.TableSetupColumn("Neighbor Z-", ImGuiTableColumnFlags.WidthFixed, 40, 12);
+			ImGui.TableSetupColumn("Neighbor X+", ImGuiTableColumnFlags.WidthFixed, 40, 13);
+			ImGui.TableSetupColumn("Neighbor X-", ImGuiTableColumnFlags.WidthFixed, 40, 14);
 			ImGui.TableSetupColumn("Exclamation Index", ImGuiTableColumnFlags.WidthFixed, 128, 15);
 
 			ImGui.TableSetupScrollFreeze(0, 1);
