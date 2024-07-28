@@ -11,10 +11,10 @@ public class RncTests
 	[DataRow("CRATES")]
 	public void ExtractGscToNus(string fileName)
 	{
-		byte[] gscInput = File.ReadAllBytes(Path.Combine("Resources", $"{fileName}.GSC"));
 		byte[] expectedNusInput = File.ReadAllBytes(Path.Combine("Resources", $"{fileName}.NUS"));
 
-		byte[] nusOutput = RncMethod2.Unpack(gscInput);
+		using FileStream gscFileStream = File.OpenRead(Path.Combine("Resources", $"{fileName}.GSC"));
+		byte[] nusOutput = RncMethod2.Unpack(gscFileStream);
 
 		Assert.AreEqual(expectedNusInput.Length, nusOutput.Length);
 

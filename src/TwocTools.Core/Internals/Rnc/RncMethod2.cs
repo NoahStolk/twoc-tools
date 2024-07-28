@@ -1,5 +1,6 @@
 ﻿namespace TwocTools.Core.Internals.Rnc;
 
+// Based on: https://github.com/lab313ru/rnc_propack_source
 public static class RncMethod2
 {
 	private enum ErrorCodes
@@ -157,7 +158,7 @@ public static class RncMethod2
 		{
 			WriteBuf(v.Output, ref v.OutputOffset, v.Decoded[v.DictSize..], 0xFFFF - v.DictSize);
 			Array.Copy(v.Decoded, v.Window - v.DictSize, v.Decoded, 0, v.DictSize);
-			v.Window = (IntPtr)v.DictSize;
+			v.Window = v.DictSize;
 		}
 
 		v.Decoded[v.Window.ToInt32()] = b;
@@ -245,28 +246,25 @@ public static class RncMethod2
 		long startPos = v.InputOffset;
 		uint sign = ReadDwordBe(v.Input, ref v.InputOffset);
 		if (sign >> 8 != 0x524E43) // RNC
-		{
 			return ErrorCodes.WrongRncHeader;
-		}
+
 		v.Method = sign & 3;
 		v.InputSize = ReadDwordBe(v.Input, ref v.InputOffset);
 		v.PackedSize = ReadDwordBe(v.Input, ref v.InputOffset);
 		if (v.FileSize < v.PackedSize)
-		{
 			return ErrorCodes.WrongRncHeader2;
-		}
+
 		v.UnpackedCrc = ReadWordBe(v.Input, ref v.InputOffset);
 		v.PackedCrc = ReadWordBe(v.Input, ref v.InputOffset);
 		ReadByte(v.Input, ref v.InputOffset);
 		ReadByte(v.Input, ref v.InputOffset);
 		if (CrcBlock(v.Input, v.InputOffset, (int)v.PackedSize) != v.PackedCrc)
-		{
 			return ErrorCodes.CorruptedInputData;
-		}
+
 		v.Mem1 = new byte[0xFFFF];
 		v.Decoded = new byte[0xFFFF];
 		v.PackBlockStart = 0xFFFD;
-		v.Window = (IntPtr)v.DictSize;
+		v.Window = v.DictSize;
 		v.UnpackedCrcReal = 0;
 		v.BitCount = 0;
 		v.BitBuffer = 0;
@@ -274,58 +272,39 @@ public static class RncMethod2
 		ushort specifiedKey = v.EncKey;
 		ErrorCodes errorCode = 0;
 		InputBitsM2(v, 1);
-		if (errorCode == 0)
-		{
-			if (InputBitsM2(v, 1) != 0 && v.EncKey == 0)
-			{
-				errorCode = ErrorCodes.DecryptionKeyRequired;
-			}
-		}
-		if (errorCode == 0)
-		{
-			if (v.Method == 2)
-			{
-				errorCode = (ErrorCodes)UnpackDataM2(v);
-			}
-		}
+		if (InputBitsM2(v, 1) != 0 && v.EncKey == 0)
+			errorCode = ErrorCodes.DecryptionKeyRequired;
+
+		if (errorCode == 0 && v.Method == 2)
+			errorCode = (ErrorCodes)UnpackDataM2(v);
+
 		v.EncKey = specifiedKey;
 		v.InputOffset = startPos + v.PackedSize + 0x12;
 		if (errorCode != 0)
 		{
 			return errorCode;
 		}
-		if (v.UnpackedCrc != v.UnpackedCrcReal)
-		{
-			Console.WriteLine($"CRC check failed: {v.UnpackedCrc} != {v.UnpackedCrcReal}");
-			return ErrorCodes.CrcCheckFailed;
-		}
-		return ErrorCodes.None;
+
+		return v.UnpackedCrc != v.UnpackedCrcReal ? ErrorCodes.CrcCheckFailed : ErrorCodes.None;
 	}
 
 	private static ErrorCodes DoUnpack(Vars v)
 	{
 		v.PackedSize = v.FileSize;
-		if (v.FileSize < 0x12)
-		{
-			return ErrorCodes.WrongRncHeader;
-		}
-		return DoUnpackData(v);
+		return v.FileSize < 0x12 ? ErrorCodes.WrongRncHeader : DoUnpackData(v);
 	}
 
-	public static byte[] Unpack(byte[] input)
+	public static byte[] Unpack(Stream inFile)
 	{
 		Vars v = InitVars();
 		v.ReadStartOffset = 0;
 		v.InputOffset = 0;
 		v.OutputOffset = 0;
 
-		using (MemoryStream inFile = new(input))
-		{
-			v.FileSize = (uint)(inFile.Length - v.ReadStartOffset);
-			v.Input = new byte[v.FileSize];
-			inFile.Seek(v.ReadStartOffset, SeekOrigin.Begin);
-			inFile.Read(v.Input, 0, (int)v.FileSize);
-		}
+		v.FileSize = (uint)(inFile.Length - v.ReadStartOffset);
+		v.Input = new byte[v.FileSize];
+		inFile.Seek(v.ReadStartOffset, SeekOrigin.Begin);
+		inFile.Read(v.Input, 0, (int)v.FileSize);
 
 		v.Output = new byte[0x1E00000];
 		ErrorCodes errorCode = DoUnpack(v);
