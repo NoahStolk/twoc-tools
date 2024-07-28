@@ -18,4 +18,10 @@
     <ProjectReference Include="..\TwocTools.Core\TwocTools.Core.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\**\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
