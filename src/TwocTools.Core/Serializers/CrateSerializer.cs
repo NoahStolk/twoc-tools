@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Crt;
 using TwocTools.Core.Internals;
 using TwocTools.Core.Internals.Extensions;
 

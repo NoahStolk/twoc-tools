@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Numerics;
 
-namespace TwocTools.Core.DataTypes;
+namespace TwocTools.Core.DataTypes.Crt;
 
 public record CrateGroup : IEnumerable<Crate>
 {

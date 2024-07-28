@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace TwocTools.Core.DataTypes;
+namespace TwocTools.Core.DataTypes.Wmp;
 
 public record WumpaCollection : IEnumerable<Wumpa>
 {

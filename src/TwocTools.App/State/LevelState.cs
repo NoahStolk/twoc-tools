@@ -1,5 +1,7 @@
 ﻿using TwocTools.App.Ui;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Crt;
+using TwocTools.Core.DataTypes.Wmp;
 
 namespace TwocTools.App.State;
 

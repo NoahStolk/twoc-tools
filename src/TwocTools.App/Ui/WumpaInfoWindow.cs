@@ -2,6 +2,7 @@
 using ImGuiNET;
 using TwocTools.App.State;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Wmp;
 
 namespace TwocTools.App.Ui;
 

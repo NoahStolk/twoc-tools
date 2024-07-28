@@ -5,6 +5,7 @@ using TwocTools.App.Extensions;
 using TwocTools.App.State;
 using TwocTools.Core;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Crt;
 using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;

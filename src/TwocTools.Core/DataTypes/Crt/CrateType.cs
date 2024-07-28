@@ -1,4 +1,4 @@
-﻿namespace TwocTools.Core.DataTypes;
+﻿namespace TwocTools.Core.DataTypes.Crt;
 
 #pragma warning disable CA1008, CA1027, CA1028
 public enum CrateType : sbyte

@@ -2,6 +2,8 @@
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Crt;
+using TwocTools.Core.DataTypes.Wmp;
 using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;

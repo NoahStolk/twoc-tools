@@ -5,6 +5,8 @@ using System.Numerics;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Crt;
+using TwocTools.Core.DataTypes.Wmp;
 using static TwocTools.App.Graphics;
 
 namespace TwocTools.App.Rendering;

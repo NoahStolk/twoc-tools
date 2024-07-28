@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace TwocTools.Core.DataTypes;
+namespace TwocTools.Core.DataTypes.Wmp;
 
 public record struct Wumpa
 {

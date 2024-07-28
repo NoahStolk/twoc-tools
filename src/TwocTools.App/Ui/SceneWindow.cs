@@ -7,6 +7,7 @@ using System.Numerics;
 using TwocTools.App.Rendering;
 using TwocTools.App.State;
 using TwocTools.Core.DataTypes;
+using TwocTools.Core.DataTypes.Crt;
 
 namespace TwocTools.App.Ui;
 
