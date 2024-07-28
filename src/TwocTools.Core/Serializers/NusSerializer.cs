@@ -26,15 +26,24 @@ public static class NusSerializer
 
 		br.BaseStream.Seek(12, SeekOrigin.Current);
 
-		while (true)
+		while (br.BaseStream.Position < br.BaseStream.Length)
 		{
+			long originalPosition = br.BaseStream.Position;
+
 			ReadOnlySpan<byte> blockId = br.ReadBytes(4);
 			uint size = br.ReadUInt32();
 
+			Console.WriteLine($"Found block {Encoding.UTF8.GetString(blockId)} with size {size}.");
 			if (blockId.SequenceEqual("NTBL"u8))
 			{
 				NameTable nameTable = ParseNameTable(br);
+				Console.WriteLine($"Parsed name table with {nameTable.Names.Count} names: {string.Join(", ", nameTable.Names)}");
 			}
+			else// if (blockId.SequenceEqual("TST0"u8))
+			{
+			}
+
+			br.BaseStream.Seek(originalPosition + size, SeekOrigin.Begin);
 		}
 	}
 
