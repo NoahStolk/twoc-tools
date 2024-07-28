@@ -39,8 +39,9 @@ public static class NusSerializer
 				NameTable nameTable = ParseNameTable(br);
 				Console.WriteLine($"Parsed name table with {nameTable.Names.Count} names: {string.Join(", ", nameTable.Names)}");
 			}
-			else// if (blockId.SequenceEqual("TST0"u8))
+			else if (blockId.SequenceEqual("TST0"u8))
 			{
+				ParseTextures(br);
 			}
 
 			br.BaseStream.Seek(originalPosition + size, SeekOrigin.Begin);
@@ -60,5 +61,9 @@ public static class NusSerializer
 		}
 
 		return new NameTable(size, names);
+	}
+
+	private static void ParseTextures(BinaryReader br)
+	{
 	}
 }
