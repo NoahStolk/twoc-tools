@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwocTools.Core", "TwocTools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwocTools.App", "TwocTools.App\TwocTools.App.csproj", "{1E9A7C25-1B1B-437A-B8AA-E66D7286C501}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwocTools.Core.Tests", "TwocTools.Core.Tests\TwocTools.Core.Tests.csproj", "{98F0C1D8-3F1A-464E-8733-4C39879083DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{1E9A7C25-1B1B-437A-B8AA-E66D7286C501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E9A7C25-1B1B-437A-B8AA-E66D7286C501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E9A7C25-1B1B-437A-B8AA-E66D7286C501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F0C1D8-3F1A-464E-8733-4C39879083DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F0C1D8-3F1A-464E-8733-4C39879083DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F0C1D8-3F1A-464E-8733-4C39879083DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F0C1D8-3F1A-464E-8733-4C39879083DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
