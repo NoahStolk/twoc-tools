@@ -1,6 +1,5 @@
 ﻿using Detach.Numerics;
 using ImGuiNET;
-using TwocTools.Core.DataTypes;
 using TwocTools.Core.DataTypes.Crt;
 
 namespace TwocTools.App.Extensions;

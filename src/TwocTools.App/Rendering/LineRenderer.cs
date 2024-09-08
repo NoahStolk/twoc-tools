@@ -4,79 +4,93 @@ using Silk.NET.OpenGL;
 using System.Numerics;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
-using TwocTools.Core.DataTypes;
 using TwocTools.Core.DataTypes.Crt;
 using TwocTools.Core.DataTypes.Wmp;
-using static TwocTools.App.Graphics;
 
 namespace TwocTools.App.Rendering;
 
 public sealed class LineRenderer
 {
-	private static readonly uint _lineVao = VaoUtils.CreateLineVao([Vector3.Zero, Vector3.UnitZ]);
-	private static readonly uint _centeredLineVao = VaoUtils.CreateLineVao([-Vector3.UnitZ, Vector3.UnitZ]);
+	private readonly uint _lineVao;
+	private readonly uint _centeredLineVao;
 
-	private static readonly Vector3[] _cubeVertices = VertexUtils.GetCubeVertexPositions();
-	private static readonly uint _cubeVao = VaoUtils.CreateLineVao(_cubeVertices);
+	private readonly Vector3[] _cubeVertices;
+	private readonly uint _cubeVao;
 
-	private static readonly Vector3[] _sphereVertices = VertexUtils.GetSphereVertexPositions(4, 8, 1);
-	private static readonly uint _sphereVao = VaoUtils.CreateLineVao(_sphereVertices);
+	private readonly Vector3[] _sphereVertices;
+	private readonly uint _sphereVao;
+
+	private readonly GL _gl;
+	private readonly LevelState _levelState;
+	private readonly Camera3d _camera3d;
 
 	private readonly Shader _lineShader;
 	private readonly int _modelUniform;
 	private readonly int _colorUniform;
 
-	public LineRenderer()
+	public LineRenderer(GL gl, LevelState levelState, Camera3d camera3d, ShaderLoader shaderLoader)
 	{
+		_gl = gl;
+		_levelState = levelState;
+		_camera3d = camera3d;
 		string vertexCode = File.ReadAllText(Path.Combine("Content", "Shaders", "Line.vert"));
 		string fragmentCode = File.ReadAllText(Path.Combine("Content", "Shaders", "Line.frag"));
 
-		_lineShader = new Shader(ShaderLoader.Load(vertexCode, fragmentCode));
-		_modelUniform = _lineShader.GetUniformLocation("model");
-		_colorUniform = _lineShader.GetUniformLocation("color");
+		_lineShader = new Shader(shaderLoader.Load(vertexCode, fragmentCode));
+		_modelUniform = _lineShader.GetUniformLocation(_gl, "model");
+		_colorUniform = _lineShader.GetUniformLocation(_gl, "color");
+
+		_lineVao = VaoUtils.CreateLineVao(_gl, [Vector3.Zero, Vector3.UnitZ]);
+		_centeredLineVao = VaoUtils.CreateLineVao(_gl, [-Vector3.UnitZ, Vector3.UnitZ]);
+
+		_cubeVertices = VertexUtils.GetCubeVertexPositions();
+		_cubeVao = VaoUtils.CreateLineVao(_gl, _cubeVertices);
+
+		_sphereVertices = VertexUtils.GetSphereVertexPositions(4, 8, 1);
+		_sphereVao = VaoUtils.CreateLineVao(_gl, _sphereVertices);
 	}
 
 	public void Render()
 	{
-		Gl.UseProgram(_lineShader.Id);
+		_gl.UseProgram(_lineShader.Id);
 
-		Gl.UniformMatrix4x4(_lineShader.GetUniformLocation("view"), Camera3d.ViewMatrix);
-		Gl.UniformMatrix4x4(_lineShader.GetUniformLocation("projection"), Camera3d.Projection);
+		_gl.UniformMatrix4x4(_lineShader.GetUniformLocation(_gl, "view"), _camera3d.ViewMatrix);
+		_gl.UniformMatrix4x4(_lineShader.GetUniformLocation(_gl, "projection"), _camera3d.Projection);
 
-		Gl.BindVertexArray(_lineVao);
+		_gl.BindVertexArray(_lineVao);
 		RenderOrigin();
-		RenderGrid(Camera3d.Position.Round(0) with { Y = 0 }, new Vector4(1, 1, 1, 0.25f), 64, 1);
+		RenderGrid(_camera3d.Position.Round(0) with { Y = 0 }, new Vector4(1, 1, 1, 0.25f), 64, 1);
 
-		Gl.BindVertexArray(_centeredLineVao);
-		Gl.LineWidth(1);
+		_gl.BindVertexArray(_centeredLineVao);
+		_gl.LineWidth(1);
 		RenderFocusAxes();
 
-		Gl.BindVertexArray(_cubeVao);
-		Gl.LineWidth(4);
+		_gl.BindVertexArray(_cubeVao);
+		_gl.LineWidth(4);
 		RenderCrates();
 
-		Gl.BindVertexArray(_sphereVao);
-		Gl.LineWidth(1);
+		_gl.BindVertexArray(_sphereVao);
+		_gl.LineWidth(1);
 		RenderWumpa();
 	}
 
 	private void RenderLine(Matrix4x4 modelMatrix, Vector4 color)
 	{
-		Gl.UniformMatrix4x4(_modelUniform, modelMatrix);
-		Gl.Uniform4(_colorUniform, color);
-		Gl.DrawArrays(PrimitiveType.Lines, 0, 2);
+		_gl.UniformMatrix4x4(_modelUniform, modelMatrix);
+		_gl.Uniform4(_colorUniform, color);
+		_gl.DrawArrays(PrimitiveType.Lines, 0, 2);
 	}
 
 	private void RenderOrigin()
 	{
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(1, 1, 256);
 
-		Gl.LineWidth(4);
+		_gl.LineWidth(4);
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, MathF.PI / 2), new Vector4(1, 0, 0, 1));
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitX, MathF.PI * 1.5f), new Vector4(0, 1, 0, 1));
 		RenderLine(scaleMatrix, new Vector4(0, 0, 1, 1));
 
-		Gl.LineWidth(2);
+		_gl.LineWidth(2);
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, -MathF.PI / 2), new Vector4(1, 0, 0, 0.5f));
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitX, MathF.PI / 2), new Vector4(0, 1, 0, 0.5f));
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, MathF.PI), new Vector4(0, 0, 1, 0.5f));
@@ -84,8 +98,8 @@ public sealed class LineRenderer
 
 	private void RenderGrid(Vector3 origin, Vector4 color, int cellCount, int cellSize)
 	{
-		Gl.Uniform4(_colorUniform, color);
-		Gl.LineWidth(1);
+		_gl.Uniform4(_colorUniform, color);
+		_gl.LineWidth(1);
 
 		int min = -cellCount;
 		int max = cellCount;
@@ -99,14 +113,14 @@ public sealed class LineRenderer
 			// Prevent rendering grid lines on top of origin lines (Z-fighting).
 			if (!origin.Y.IsZero() || !(i * cellSize + offset.X).IsZero())
 			{
-				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(new Vector3(i * cellSize, origin.Y, min * cellSize) + offset));
-				Gl.DrawArrays(PrimitiveType.Lines, 0, 2);
+				_gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(new Vector3(i * cellSize, origin.Y, min * cellSize) + offset));
+				_gl.DrawArrays(PrimitiveType.Lines, 0, 2);
 			}
 
 			if (!origin.Y.IsZero() || !(i * cellSize + offset.Z).IsZero())
 			{
-				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, MathF.PI / 2) * Matrix4x4.CreateTranslation(new Vector3(min * cellSize, origin.Y, i * cellSize) + offset));
-				Gl.DrawArrays(PrimitiveType.Lines, 0, 2);
+				_gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, MathF.PI / 2) * Matrix4x4.CreateTranslation(new Vector3(min * cellSize, origin.Y, i * cellSize) + offset));
+				_gl.DrawArrays(PrimitiveType.Lines, 0, 2);
 			}
 		}
 	}
@@ -114,7 +128,7 @@ public sealed class LineRenderer
 	private void RenderFocusAxes()
 	{
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(1, 1, 128);
-		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(Camera3d.FocusPointTarget);
+		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(_camera3d.FocusPointTarget);
 
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, MathF.PI / 2) * translationMatrix, new Vector4(1, 0.5f, 0, 0.5f));
 		RenderLine(scaleMatrix * Matrix4x4.CreateFromAxisAngle(Vector3.UnitX, MathF.PI * 1.5f) * translationMatrix, new Vector4(0, 1, 0.5f, 0.5f));
@@ -124,7 +138,7 @@ public sealed class LineRenderer
 	private void RenderCrates()
 	{
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(0.5f);
-		foreach (CrateGroup crateGroup in LevelState.CrateGroupCollection)
+		foreach (CrateGroup crateGroup in _levelState.CrateGroupCollection)
 		{
 			for (int i = 0; i < crateGroup.Count; i++)
 			{
@@ -132,9 +146,9 @@ public sealed class LineRenderer
 
 				Matrix4x4 rotationMatrix = Matrix4x4.CreateFromAxisAngle(Vector3.UnitY, crateGroup.TiltInRadians);
 
-				Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * rotationMatrix * Matrix4x4.CreateTranslation(crate.WorldPosition * new Vector3(-1, 1, 1)));
-				Gl.Uniform4(_colorUniform, crate.CrateTypeA.GetColor());
-				Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_cubeVertices.Length);
+				_gl.UniformMatrix4x4(_modelUniform, scaleMatrix * rotationMatrix * Matrix4x4.CreateTranslation(crate.WorldPosition * new Vector3(-1, 1, 1)));
+				_gl.Uniform4(_colorUniform, crate.CrateTypeA.GetColor());
+				_gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_cubeVertices.Length);
 			}
 		}
 	}
@@ -142,13 +156,13 @@ public sealed class LineRenderer
 	private void RenderWumpa()
 	{
 		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(0.25f);
-		for (int i = 0; i < LevelState.WumpaCollection.Count; i++)
+		for (int i = 0; i < _levelState.WumpaCollection.Count; i++)
 		{
-			Wumpa wumpa = LevelState.WumpaCollection[i];
+			Wumpa wumpa = _levelState.WumpaCollection[i];
 
-			Gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(wumpa.Position * new Vector3(-1, 1, 1)));
-			Gl.Uniform4(_colorUniform, Rgba.Orange with { A = 160 });
-			Gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_sphereVertices.Length);
+			_gl.UniformMatrix4x4(_modelUniform, scaleMatrix * Matrix4x4.CreateTranslation(wumpa.Position * new Vector3(-1, 1, 1)));
+			_gl.Uniform4(_colorUniform, Rgba.Orange with { A = 160 });
+			_gl.DrawArrays(PrimitiveType.Lines, 0, (uint)_sphereVertices.Length);
 		}
 	}
 }

@@ -1,18 +1,21 @@
-﻿using TwocTools.App.Ui;
-using TwocTools.Core.DataTypes;
-using TwocTools.Core.DataTypes.Crt;
+﻿using TwocTools.Core.DataTypes.Crt;
 using TwocTools.Core.DataTypes.Wmp;
 
 namespace TwocTools.App.State;
 
-public static class LevelState
+public sealed class LevelState
 {
-	public static string CrateGroupCollectionPath { get; private set; } = string.Empty;
-	public static string WumpaCollectionPath { get; private set; } = string.Empty;
-	public static CrateGroupCollection CrateGroupCollection { get; private set; } = CrateGroupCollection.Empty;
-	public static WumpaCollection WumpaCollection { get; private set; } = WumpaCollection.Empty;
+	// TODO: Refactor.
+	// Visualization created from state (used for sorting, etc.)
+	public List<CrateGroup> CrateGroupVisualization { get; set; } = [];
+	public List<Crate> CratesVisualization { get; set; } = [];
 
-	public static void SetLevel(
+	public string CrateGroupCollectionPath { get; private set; } = string.Empty;
+	public string WumpaCollectionPath { get; private set; } = string.Empty;
+	public CrateGroupCollection CrateGroupCollection { get; private set; } = CrateGroupCollection.Empty;
+	public WumpaCollection WumpaCollection { get; private set; } = WumpaCollection.Empty;
+
+	public void SetLevel(
 		string crateGroupCollectionPath,
 		string wumpaCollectionPath,
 		CrateGroupCollection crateGroupCollection,
@@ -24,7 +27,7 @@ public static class LevelState
 		CrateGroupCollection = crateGroupCollection;
 		WumpaCollection = wumpaCollection;
 
-		// TODO: Refactor.
-		CrateInfoWindow.UpdateState();
+		CrateGroupVisualization = CrateGroupCollection.ToList();
+		CratesVisualization = CrateGroupCollection.SelectMany(c => c).ToList();
 	}
 }

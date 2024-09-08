@@ -4,40 +4,36 @@ using System.Numerics;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
 using TwocTools.Core;
-using TwocTools.Core.DataTypes;
 using TwocTools.Core.DataTypes.Crt;
 using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;
 
-public static unsafe class CrateInfoWindow
+public sealed unsafe class CrateInfoWindow
 {
+	private readonly LevelState _levelState;
+
 	// Utilities
-	private static readonly List<CrateType> _allCrateTypes = Enum.GetValues<CrateType>().ToList();
-	private static readonly Dictionary<CrateType, string> _crateTypeNames = _allCrateTypes.ToDictionary(t => t, t => t.ToString());
+	private readonly List<CrateType> _allCrateTypes = Enum.GetValues<CrateType>().ToList();
+	private readonly Dictionary<CrateType, string> _crateTypeNames;
 
-	// Visualization created from state (used for sorting, etc.)
-	private static List<CrateGroup> _crateGroupVisualization = [];
-	private static List<Crate> _cratesVisualization = [];
-
-	// TODO: Refactor to event handler or something.
-	public static void UpdateState()
+	public CrateInfoWindow(LevelState levelState)
 	{
-		_crateGroupVisualization = LevelState.CrateGroupCollection.ToList();
-		_cratesVisualization = LevelState.CrateGroupCollection.SelectMany(c => c).ToList();
+		_levelState = levelState;
+		_crateTypeNames = _allCrateTypes.ToDictionary(t => t, t => t.ToString());
 	}
 
-	public static void Render()
+	public void Render()
 	{
 		if (ImGui.Begin("Crate Info"))
 		{
-			ImGui.Text(LevelState.CrateGroupCollectionPath);
+			ImGui.Text(_levelState.CrateGroupCollectionPath);
 
 			ImGui.Separator();
 
-			ImGui.Text(Inline.Span($"Version: {LevelState.CrateGroupCollection.Version}"));
-			ImGui.Text(Inline.Span($"Crate group count: {LevelState.CrateGroupCollection.Count}"));
-			ImGui.Text(Inline.Span($"Crate count: {_cratesVisualization.Count}"));
+			ImGui.Text(Inline.Span($"Version: {_levelState.CrateGroupCollection.Version}"));
+			ImGui.Text(Inline.Span($"Crate group count: {_levelState.CrateGroupCollection.Count}"));
+			ImGui.Text(Inline.Span($"Crate count: {_levelState.CratesVisualization.Count}"));
 
 			ImGui.Separator();
 
@@ -71,7 +67,7 @@ public static unsafe class CrateInfoWindow
 		ImGui.End();
 	}
 
-	private static void RenderCrateTypeCountsTable()
+	private void RenderCrateTypeCountsTable()
 	{
 		if (ImGui.BeginTable("CrateTypeCountsTable", 5))
 		{
@@ -90,10 +86,10 @@ public static unsafe class CrateInfoWindow
 				Vector4 colorDefault = *ImGui.GetStyleColorVec4(ImGuiCol.Text);
 				Vector4 colorDisabled = *ImGui.GetStyleColorVec4(ImGuiCol.TextDisabled);
 
-				int countA = _cratesVisualization.Count(c => c.CrateTypeA == crateType);
-				int countB = _cratesVisualization.Count(c => c.CrateTypeB == crateType);
-				int countC = _cratesVisualization.Count(c => c.CrateTypeC == crateType);
-				int countD = _cratesVisualization.Count(c => c.CrateTypeD == crateType);
+				int countA = _levelState.CratesVisualization.Count(c => c.CrateTypeA == crateType);
+				int countB = _levelState.CratesVisualization.Count(c => c.CrateTypeB == crateType);
+				int countC = _levelState.CratesVisualization.Count(c => c.CrateTypeC == crateType);
+				int countD = _levelState.CratesVisualization.Count(c => c.CrateTypeD == crateType);
 
 				TableNextColumnText(Inline.Span(crateType), crateType.GetColor());
 				TableNextColumnText(Inline.Span(countA), countA == 0 ? colorDisabled : colorDefault);
@@ -106,7 +102,7 @@ public static unsafe class CrateInfoWindow
 		}
 	}
 
-	private static void RenderCrateGroupsTable()
+	private void RenderCrateGroupsTable()
 	{
 		if (ImGui.BeginTable("CrateGroupsTable", 6, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
 		{
@@ -128,7 +124,7 @@ public static unsafe class CrateInfoWindow
 
 				Action sortAction = sorting switch
 				{
-					0 => () => _crateGroupVisualization.Sort((a, b) =>
+					0 => () => _levelState.CrateGroupVisualization.Sort((a, b) =>
 					{
 						int result = a.Position.X.CompareTo(b.Position.X);
 						if (result == 0)
@@ -138,11 +134,11 @@ public static unsafe class CrateInfoWindow
 
 						return sortAscending ? result : -result;
 					}),
-					1 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.CrateOffset.CompareTo(b.CrateOffset) : -a.CrateOffset.CompareTo(b.CrateOffset)),
-					2 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.CrateCount.CompareTo(b.CrateCount) : -a.CrateCount.CompareTo(b.CrateCount)),
-					3 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.Tilt.CompareTo(b.Tilt) : -a.Tilt.CompareTo(b.Tilt)),
-					4 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.TiltInRadians.CompareTo(b.TiltInRadians) : -a.TiltInRadians.CompareTo(b.TiltInRadians)),
-					5 => () => _crateGroupVisualization.Sort((a, b) => sortAscending ? a.TiltInDegrees.CompareTo(b.TiltInDegrees) : -a.TiltInDegrees.CompareTo(b.TiltInDegrees)),
+					1 => () => _levelState.CrateGroupVisualization.Sort((a, b) => sortAscending ? a.CrateOffset.CompareTo(b.CrateOffset) : -a.CrateOffset.CompareTo(b.CrateOffset)),
+					2 => () => _levelState.CrateGroupVisualization.Sort((a, b) => sortAscending ? a.CrateCount.CompareTo(b.CrateCount) : -a.CrateCount.CompareTo(b.CrateCount)),
+					3 => () => _levelState.CrateGroupVisualization.Sort((a, b) => sortAscending ? a.Tilt.CompareTo(b.Tilt) : -a.Tilt.CompareTo(b.Tilt)),
+					4 => () => _levelState.CrateGroupVisualization.Sort((a, b) => sortAscending ? a.TiltInRadians.CompareTo(b.TiltInRadians) : -a.TiltInRadians.CompareTo(b.TiltInRadians)),
+					5 => () => _levelState.CrateGroupVisualization.Sort((a, b) => sortAscending ? a.TiltInDegrees.CompareTo(b.TiltInDegrees) : -a.TiltInDegrees.CompareTo(b.TiltInDegrees)),
 					_ => static () => { },
 				};
 				sortAction();
@@ -150,7 +146,7 @@ public static unsafe class CrateInfoWindow
 				sortsSpecs.SpecsDirty = false;
 			}
 
-			foreach (CrateGroup crateGroup in _crateGroupVisualization)
+			foreach (CrateGroup crateGroup in _levelState.CrateGroupVisualization)
 			{
 				ImGui.TableNextRow();
 
@@ -166,7 +162,7 @@ public static unsafe class CrateInfoWindow
 		}
 	}
 
-	private static void RenderCratesTable()
+	private void RenderCratesTable()
 	{
 		const int columnCount = 16;
 		if (ImGui.BeginTable("CratesTable", columnCount, ImGuiTableFlags.ScrollY | ImGuiTableFlags.Sortable))
@@ -221,9 +217,9 @@ public static unsafe class CrateInfoWindow
 
 				Action sortAction = sorting switch
 				{
-					0 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.Index.CompareTo(b.Index) : -a.Index.CompareTo(b.Index)),
-					1 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.GroupIndex.CompareTo(b.GroupIndex) : -a.GroupIndex.CompareTo(b.GroupIndex)),
-					2 => () => _cratesVisualization.Sort((a, b) =>
+					0 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.Index.CompareTo(b.Index) : -a.Index.CompareTo(b.Index)),
+					1 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.GroupIndex.CompareTo(b.GroupIndex) : -a.GroupIndex.CompareTo(b.GroupIndex)),
+					2 => () => _levelState.CratesVisualization.Sort((a, b) =>
 					{
 						int result = a.WorldPosition.X.CompareTo(b.WorldPosition.X);
 						if (result == 0)
@@ -233,8 +229,8 @@ public static unsafe class CrateInfoWindow
 
 						return sortAscending ? result : -result;
 					}),
-					3 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.A.CompareTo(b.A) : -a.A.CompareTo(b.A)),
-					4 => () => _cratesVisualization.Sort((a, b) =>
+					3 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.A.CompareTo(b.A) : -a.A.CompareTo(b.A)),
+					4 => () => _levelState.CratesVisualization.Sort((a, b) =>
 					{
 						int result = a.LocalPositionX.CompareTo(b.LocalPositionX);
 						if (result == 0)
@@ -244,17 +240,17 @@ public static unsafe class CrateInfoWindow
 
 						return sortAscending ? result : -result;
 					}),
-					5 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeA.CompareTo(b.CrateTypeA) : -a.CrateTypeA.CompareTo(b.CrateTypeA)),
-					6 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeB.CompareTo(b.CrateTypeB) : -a.CrateTypeB.CompareTo(b.CrateTypeB)),
-					7 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeC.CompareTo(b.CrateTypeC) : -a.CrateTypeC.CompareTo(b.CrateTypeC)),
-					8 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeD.CompareTo(b.CrateTypeD) : -a.CrateTypeD.CompareTo(b.CrateTypeD)),
-					9 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.F.CompareTo(b.F) : -a.F.CompareTo(b.F)),
-					10 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.G.CompareTo(b.G) : -a.G.CompareTo(b.G)),
-					11 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.H.CompareTo(b.H) : -a.H.CompareTo(b.H)),
-					12 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.I.CompareTo(b.I) : -a.I.CompareTo(b.I)),
-					13 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.J.CompareTo(b.J) : -a.J.CompareTo(b.J)),
-					14 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.K.CompareTo(b.K) : -a.K.CompareTo(b.K)),
-					15 => () => _cratesVisualization.Sort((a, b) => sortAscending ? a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex) : -a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex)),
+					5 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeA.CompareTo(b.CrateTypeA) : -a.CrateTypeA.CompareTo(b.CrateTypeA)),
+					6 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeB.CompareTo(b.CrateTypeB) : -a.CrateTypeB.CompareTo(b.CrateTypeB)),
+					7 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeC.CompareTo(b.CrateTypeC) : -a.CrateTypeC.CompareTo(b.CrateTypeC)),
+					8 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeD.CompareTo(b.CrateTypeD) : -a.CrateTypeD.CompareTo(b.CrateTypeD)),
+					9 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.F.CompareTo(b.F) : -a.F.CompareTo(b.F)),
+					10 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.G.CompareTo(b.G) : -a.G.CompareTo(b.G)),
+					11 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.H.CompareTo(b.H) : -a.H.CompareTo(b.H)),
+					12 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.I.CompareTo(b.I) : -a.I.CompareTo(b.I)),
+					13 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.J.CompareTo(b.J) : -a.J.CompareTo(b.J)),
+					14 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.K.CompareTo(b.K) : -a.K.CompareTo(b.K)),
+					15 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex) : -a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex)),
 					_ => static () => { },
 				};
 				sortAction();
@@ -264,7 +260,7 @@ public static unsafe class CrateInfoWindow
 
 			Vector4 colorDefault = *ImGui.GetStyleColorVec4(ImGuiCol.Text);
 			Vector4 colorDisabled = *ImGui.GetStyleColorVec4(ImGuiCol.TextDisabled);
-			foreach (Crate crate in _cratesVisualization)
+			foreach (Crate crate in _levelState.CratesVisualization)
 			{
 				ImGui.TableNextRow();
 

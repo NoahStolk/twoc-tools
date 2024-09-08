@@ -1,4 +1,6 @@
-﻿namespace TwocTools.App.Rendering;
+﻿using Silk.NET.OpenGL;
+
+namespace TwocTools.App.Rendering;
 
 public sealed class Shader
 {
@@ -11,12 +13,12 @@ public sealed class Shader
 
 	public uint Id { get; }
 
-	public int GetUniformLocation(string name)
+	public int GetUniformLocation(GL gl, string name)
 	{
 		if (_uniformLocations.TryGetValue(name, out int location))
 			return location;
 
-		location = Graphics.Gl.GetUniformLocation(Id, name);
+		location = gl.GetUniformLocation(Id, name);
 		_uniformLocations.Add(name, location);
 
 		return location;

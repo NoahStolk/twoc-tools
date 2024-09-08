@@ -13,8 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="NativeFileDialogSharp" Version="0.5.0"/>
-    <PackageReference Include="NoahStolk.Detach" Version="0.11.0"/>
-    <PackageReference Include="NoahStolk.ImGuiGlfw" Version="0.7.0"/>
+    <PackageReference Include="NoahStolk.Detach" Version="0.11.2" />
+    <PackageReference Include="NoahStolk.ImGuiGlfw" Version="0.8.0" />
+    <PackageReference Include="StrongInject" Version="1.4.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +27,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.27.0.93347">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

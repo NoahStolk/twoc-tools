@@ -4,11 +4,18 @@ using TwocTools.App.State;
 
 namespace TwocTools.App.Ui;
 
-public static class GameSelectWindow
+public sealed class GameSelectWindow
 {
-	private static GameVersion _gameVersion = GameVersion.Ps2GreatestHits;
+	private readonly GameState _gameState;
 
-	public static void Render()
+	private GameVersion _gameVersion = GameVersion.Ps2GreatestHits;
+
+	public GameSelectWindow(GameState gameState)
+	{
+		_gameState = gameState;
+	}
+
+	public void Render()
 	{
 		if (ImGui.Begin("Game Select", ImGuiWindowFlags.NoCollapse))
 		{
@@ -34,10 +41,10 @@ public static class GameSelectWindow
 		}
 	}
 
-	private static void Import()
+	private void Import()
 	{
 		DialogResult dialogResult = Dialog.FolderPicker();
 		if (dialogResult.IsOk)
-			GameState.SetGame(dialogResult.Path, _gameVersion);
+			_gameState.SetGame(dialogResult.Path, _gameVersion);
 	}
 }

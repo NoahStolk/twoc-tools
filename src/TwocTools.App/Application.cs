@@ -1,8 +1,10 @@
 ﻿using ImGuiGlfw;
 using ImGuiNET;
+using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using TwocTools.App.State;
 using TwocTools.App.Ui;
+using TwocTools.App.Utils;
 
 namespace TwocTools.App;
 
@@ -16,51 +18,79 @@ public sealed class Application
 	private const double _updateLength = 1 / _updateRate;
 	private const double _mainLoopLength = 1 / _mainLoopRate;
 
+	private readonly Glfw _glfw;
+	private readonly GL _gl;
+	private readonly unsafe WindowHandle* _window;
+	private readonly GlfwInput _glfwInput;
 	private readonly ImGuiController _imGuiController;
+	private readonly GameState _gameState;
+	private readonly CrateInfoWindow _crateInfoWindow;
+	private readonly GameSelectWindow _gameSelectWindow;
+	private readonly LevelSelectWindow _levelSelectWindow;
+	private readonly SceneWindow _sceneWindow;
+	private readonly WumpaInfoWindow _wumpaInfoWindow;
 
-	private static Application? _instance;
-
-	private double _currentTime = Graphics.Glfw.GetTime();
+	private double _currentTime;
 	private double _accumulator;
 	private double _frameTime;
 
-	public Application(ImGuiController imGuiController)
+	public unsafe Application(
+		Glfw glfw,
+		GL gl,
+		WindowHandle* window,
+		GlfwInput glfwInput,
+		ImGuiController imGuiController,
+		GameState gameState,
+		CrateInfoWindow crateInfoWindow,
+		GameSelectWindow gameSelectWindow,
+		LevelSelectWindow levelSelectWindow,
+		SceneWindow sceneWindow,
+		WumpaInfoWindow wumpaInfoWindow)
 	{
+		_glfw = glfw;
+		_gl = gl;
+		_window = window;
+		_glfwInput = glfwInput;
 		_imGuiController = imGuiController;
+		_gameState = gameState;
+		_crateInfoWindow = crateInfoWindow;
+		_gameSelectWindow = gameSelectWindow;
+		_levelSelectWindow = levelSelectWindow;
+		_sceneWindow = sceneWindow;
+		_wumpaInfoWindow = wumpaInfoWindow;
+
+		_currentTime = glfw.GetTime();
+
+		gl.Viewport(0, 0, WindowConstants.WindowWidth, WindowConstants.WindowHeight);
+		glfw.SwapInterval(0); // Turns VSync off.
+
+		glfw.SetFramebufferSizeCallback(window, (_, w, h) =>
+		{
+			gl.Viewport(0, 0, (uint)w, (uint)h);
+			imGuiController.WindowResized(w, h);
+		});
 	}
 
 	public float FrameTime => (float)_frameTime;
 
-	public static Application Instance
-	{
-		get => _instance ?? throw new InvalidOperationException("Application instance not set.");
-		set
-		{
-			if (_instance != null)
-				throw new InvalidOperationException("Application instance already set.");
-
-			_instance = value;
-		}
-	}
-
 	public unsafe void Run()
 	{
-		while (!Graphics.Glfw.WindowShouldClose(Graphics.Window))
+		while (!_glfw.WindowShouldClose(_window))
 		{
-			double expectedNextFrame = Graphics.Glfw.GetTime() + _mainLoopLength;
+			double expectedNextFrame = _glfw.GetTime() + _mainLoopLength;
 			MainLoop();
 
-			while (Graphics.Glfw.GetTime() < expectedNextFrame)
+			while (_glfw.GetTime() < expectedNextFrame)
 				Thread.Yield();
 		}
 
 		_imGuiController.Destroy();
-		Graphics.Glfw.Terminate();
+		_glfw.Terminate();
 	}
 
 	private unsafe void MainLoop()
 	{
-		double mainStartTime = Graphics.Glfw.GetTime();
+		double mainStartTime = _glfw.GetTime();
 		_frameTime = mainStartTime - _currentTime;
 		if (_frameTime > _maxMainDelta)
 			_frameTime = _maxMainDelta;
@@ -68,38 +98,38 @@ public sealed class Application
 		_currentTime = mainStartTime;
 		_accumulator += _frameTime;
 
-		Graphics.Glfw.PollEvents();
+		_glfw.PollEvents();
 
 		while (_accumulator >= _updateLength)
 			_accumulator -= _updateLength;
 
 		Render();
 
-		Graphics.Glfw.SwapBuffers(Graphics.Window);
+		_glfw.SwapBuffers(_window);
 	}
 
 	private void Render()
 	{
 		_imGuiController.Update((float)_frameTime);
 
-		ImGui.DockSpaceOverViewport(null, ImGuiDockNodeFlags.PassthruCentralNode);
+		ImGui.DockSpaceOverViewport(0, null, ImGuiDockNodeFlags.PassthruCentralNode);
 
-		Graphics.Gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		_gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		if (GameState.IsValid)
+		if (_gameState.IsValid)
 		{
-			LevelSelectWindow.Render();
-			CrateInfoWindow.Render();
-			WumpaInfoWindow.Render();
-			SceneWindow.Render();
+			_levelSelectWindow.Render();
+			_crateInfoWindow.Render();
+			_wumpaInfoWindow.Render();
+			_sceneWindow.Render();
 		}
 		else
 		{
-			GameSelectWindow.Render();
+			_gameSelectWindow.Render();
 		}
 
 		_imGuiController.Render();
 
-		Input.GlfwInput.PostRender();
+		_glfwInput.PostRender();
 	}
 }

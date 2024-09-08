@@ -1,22 +1,28 @@
 ﻿using Detach;
 using ImGuiNET;
 using TwocTools.App.State;
-using TwocTools.Core.DataTypes;
 using TwocTools.Core.DataTypes.Wmp;
 
 namespace TwocTools.App.Ui;
 
-public static class WumpaInfoWindow
+public sealed class WumpaInfoWindow
 {
-	public static void Render()
+	private readonly LevelState _levelState;
+
+	public WumpaInfoWindow(LevelState levelState)
+	{
+		_levelState = levelState;
+	}
+
+	public void Render()
 	{
 		if (ImGui.Begin("Wumpa Info"))
 		{
-			ImGui.Text(LevelState.WumpaCollectionPath);
+			ImGui.Text(_levelState.WumpaCollectionPath);
 
 			ImGui.Separator();
 
-			ImGui.Text(Inline.Span($"Wumpa count: {LevelState.WumpaCollection.Count}"));
+			ImGui.Text(Inline.Span($"Wumpa count: {_levelState.WumpaCollection.Count}"));
 
 			ImGui.Separator();
 
@@ -27,7 +33,7 @@ public static class WumpaInfoWindow
 				ImGui.TableSetupScrollFreeze(0, 1);
 				ImGui.TableHeadersRow();
 
-				foreach (Wumpa wumpa in LevelState.WumpaCollection)
+				foreach (Wumpa wumpa in _levelState.WumpaCollection)
 				{
 					ImGui.TableNextRow();
 

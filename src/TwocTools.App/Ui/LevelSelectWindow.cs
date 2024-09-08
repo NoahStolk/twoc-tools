@@ -1,21 +1,29 @@
 ﻿using ImGuiNET;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
-using TwocTools.Core.DataTypes;
 using TwocTools.Core.DataTypes.Crt;
 using TwocTools.Core.DataTypes.Wmp;
 using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;
 
-public static class LevelSelectWindow
+public sealed class LevelSelectWindow
 {
-	private static string[]? _levelPaths;
+	private readonly GameState _gameState;
+	private readonly LevelState _levelState;
 
-	public static void Render()
+	private string[]? _levelPaths;
+
+	public LevelSelectWindow(GameState gameState, LevelState levelState)
 	{
-		if (_levelPaths == null && GameState.IsValid)
-			_levelPaths = Directory.GetDirectories(Path.Combine(GameState.OpenedDirectory, "LEVELS"), "*", SearchOption.AllDirectories).Where(d => Directory.GetDirectories(d).Length == 0).ToArray();
+		_gameState = gameState;
+		_levelState = levelState;
+	}
+
+	public void Render()
+	{
+		if (_levelPaths == null && _gameState.IsValid)
+			_levelPaths = Directory.GetDirectories(Path.Combine(_gameState.OpenedDirectory, "LEVELS"), "*", SearchOption.AllDirectories).Where(d => Directory.GetDirectories(d).Length == 0).ToArray();
 
 		if (_levelPaths == null)
 			return;
@@ -37,7 +45,7 @@ public static class LevelSelectWindow
 		ImGui.End();
 	}
 
-	private static void ImportLevel(string? wmpFilePath, string? crtFilePath)
+	private void ImportLevel(string? wmpFilePath, string? crtFilePath)
 	{
 		CrateGroupCollection crateGroupCollection = CrateGroupCollection.Empty;
 		WumpaCollection wumpaCollection = WumpaCollection.Empty;
@@ -45,16 +53,16 @@ public static class LevelSelectWindow
 		if (File.Exists(crtFilePath))
 		{
 			using FileStream fs = File.OpenRead(crtFilePath);
-			crateGroupCollection = CrateSerializer.Deserialize(fs, GameState.GameVersion.GetEndianness());
+			crateGroupCollection = CrateSerializer.Deserialize(fs, _gameState.GameVersion.GetEndianness());
 		}
 
 		if (File.Exists(wmpFilePath))
 		{
 			using FileStream fs = File.OpenRead(wmpFilePath);
-			wumpaCollection = WumpaSerializer.Deserialize(fs, GameState.GameVersion.GetEndianness());
+			wumpaCollection = WumpaSerializer.Deserialize(fs, _gameState.GameVersion.GetEndianness());
 		}
 
-		LevelState.SetLevel(
+		_levelState.SetLevel(
 			crtFilePath ?? "<None>",
 			wmpFilePath ?? "<None>",
 			crateGroupCollection,
