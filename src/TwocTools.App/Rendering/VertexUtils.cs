@@ -2,7 +2,7 @@
 
 namespace TwocTools.App.Rendering;
 
-public static class VertexUtils
+internal static class VertexUtils
 {
 	public static Vector3[] GetCubeVertexPositions()
 	{

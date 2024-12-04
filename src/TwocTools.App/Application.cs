@@ -1,5 +1,6 @@
-﻿using ImGuiGlfw;
-using ImGuiNET;
+﻿using Detach.GlfwExtensions;
+using Detach.ImGuiBackend.GlfwHexa;
+using Hexa.NET.ImGui;
 using Silk.NET.GLFW;
 using Silk.NET.OpenGL;
 using TwocTools.App.State;
@@ -8,7 +9,7 @@ using TwocTools.App.Utils;
 
 namespace TwocTools.App;
 
-public sealed class Application
+internal sealed class Application
 {
 	private const float _maxMainDelta = 0.25f;
 
@@ -130,6 +131,6 @@ public sealed class Application
 
 		_imGuiController.Render();
 
-		_glfwInput.PostRender();
+		_glfwInput.EndFrame();
 	}
 }

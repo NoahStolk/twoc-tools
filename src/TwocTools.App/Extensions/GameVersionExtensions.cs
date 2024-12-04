@@ -3,7 +3,7 @@ using TwocTools.Core;
 
 namespace TwocTools.App.Extensions;
 
-public static class GameVersionExtensions
+internal static class GameVersionExtensions
 {
 	public static Endianness GetEndianness(this GameVersion version)
 	{

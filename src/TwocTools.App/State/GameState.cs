@@ -1,6 +1,6 @@
 ﻿namespace TwocTools.App.State;
 
-public sealed class GameState
+internal sealed class GameState
 {
 	public bool IsValid { get; private set; }
 

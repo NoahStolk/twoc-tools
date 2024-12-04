@@ -1,4 +1,5 @@
 ﻿using Detach.Extensions;
+using Detach.GlExtensions;
 using Detach.Numerics;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -9,7 +10,7 @@ using TwocTools.Core.DataTypes.Wmp;
 
 namespace TwocTools.App.Rendering;
 
-public sealed class LineRenderer
+internal sealed class LineRenderer
 {
 	private readonly uint _lineVao;
 	private readonly uint _centeredLineVao;

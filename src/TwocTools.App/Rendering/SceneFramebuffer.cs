@@ -3,78 +3,81 @@ using System.Numerics;
 
 namespace TwocTools.App.Rendering;
 
-public sealed class SceneFramebuffer
+internal sealed class SceneFramebuffer(GL gl, LineRenderer lineRenderer)
 {
-	private readonly GL _gl;
-	private readonly LineRenderer _lineRenderer;
-
 	private Vector2 _cachedFramebufferSize;
 	private uint _framebufferId;
-
-	public SceneFramebuffer(GL gl, LineRenderer lineRenderer)
-	{
-		_gl = gl;
-		_lineRenderer = lineRenderer;
-	}
 
 	public uint FramebufferTextureId { get; private set; }
 
 	public unsafe void Initialize(Vector2 framebufferSize)
 	{
+		if (framebufferSize.X < 1)
+			framebufferSize.X = 1;
+		if (framebufferSize.Y < 1)
+			framebufferSize.Y = 1;
+
 		if (_cachedFramebufferSize == framebufferSize)
 			return;
 
 		if (_framebufferId != 0)
-			_gl.DeleteFramebuffer(_framebufferId);
+			gl.DeleteFramebuffer(_framebufferId);
 
 		if (FramebufferTextureId != 0)
-			_gl.DeleteTexture(FramebufferTextureId);
+			gl.DeleteTexture(FramebufferTextureId);
 
-		_framebufferId = _gl.GenFramebuffer();
-		_gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebufferId);
+		_framebufferId = gl.GenFramebuffer();
+		gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebufferId);
 
-		FramebufferTextureId = _gl.GenTexture();
-		_gl.BindTexture(TextureTarget.Texture2D, FramebufferTextureId);
-		_gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, (uint)framebufferSize.X, (uint)framebufferSize.Y, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
-		_gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
-		_gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
-		_gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, FramebufferTextureId, 0);
+		FramebufferTextureId = gl.GenTexture();
+		gl.BindTexture(TextureTarget.Texture2D, FramebufferTextureId);
+		gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgb, (uint)framebufferSize.X, (uint)framebufferSize.Y, 0, PixelFormat.Rgb, PixelType.UnsignedByte, null);
+		gl.TexParameterI(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.Linear);
+		gl.TexParameterI(TextureTarget.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
+		gl.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferAttachment.ColorAttachment0, TextureTarget.Texture2D, FramebufferTextureId, 0);
 
-		uint rbo = _gl.GenRenderbuffer();
-		_gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
+		uint rbo = gl.GenRenderbuffer();
+		gl.BindRenderbuffer(RenderbufferTarget.Renderbuffer, rbo);
 
-		_gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.DepthComponent24, (uint)framebufferSize.X, (uint)framebufferSize.Y);
-		_gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
+		gl.RenderbufferStorage(RenderbufferTarget.Renderbuffer, InternalFormat.DepthComponent24, (uint)framebufferSize.X, (uint)framebufferSize.Y);
+		gl.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferAttachment.DepthAttachment, RenderbufferTarget.Renderbuffer, rbo);
 
-		if (_gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer) != GLEnum.FramebufferComplete)
-			Console.WriteLine("Framebuffer for scene is not complete.");
+		GLEnum framebufferStatus = gl.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+		if (framebufferStatus != GLEnum.FramebufferComplete)
+		{
+			GLEnum error = gl.GetError();
+			throw new InvalidOperationException($"Framebuffer for scene is not complete. Framebuffer status: {framebufferStatus} Last error: {error}");
+		}
 
-		_gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-		_gl.DeleteRenderbuffer(rbo);
+		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		gl.DeleteRenderbuffer(rbo);
 
 		_cachedFramebufferSize = framebufferSize;
 	}
 
 	public unsafe void RenderFramebuffer(Vector2 size)
 	{
-		_gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebufferId);
+		if (_framebufferId == 0 || FramebufferTextureId == 0 || size.X < 1 || size.Y < 1)
+			return;
+
+		gl.BindFramebuffer(FramebufferTarget.Framebuffer, _framebufferId);
 
 		// Keep track of the original viewport, so we can restore it later.
 		Span<int> originalViewport = stackalloc int[4];
-		_gl.GetInteger(GLEnum.Viewport, originalViewport);
-		_gl.Viewport(0, 0, (uint)size.X, (uint)size.Y);
+		gl.GetInteger(GLEnum.Viewport, originalViewport);
+		gl.Viewport(0, 0, (uint)size.X, (uint)size.Y);
 
-		_gl.ClearColor(0.3f, 0.3f, 0.3f, 0);
-		_gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+		gl.ClearColor(0.3f, 0.3f, 0.3f, 0);
+		gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-		_gl.Enable(EnableCap.DepthTest);
-		_gl.Enable(EnableCap.Blend);
-		_gl.Enable(EnableCap.CullFace);
-		_gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		gl.Enable(EnableCap.DepthTest);
+		gl.Enable(EnableCap.Blend);
+		gl.Enable(EnableCap.CullFace);
+		gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		_lineRenderer.Render();
+		lineRenderer.Render();
 
-		_gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
-		_gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+		gl.Viewport(originalViewport[0], originalViewport[1], (uint)originalViewport[2], (uint)originalViewport[3]);
+		gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace TwocTools.App.Rendering;
 
-public enum CameraMode
+internal enum CameraMode
 {
 	None,
 	Look,

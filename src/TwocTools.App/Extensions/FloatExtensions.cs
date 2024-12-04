@@ -1,6 +1,6 @@
 ﻿namespace TwocTools.App.Extensions;
 
-public static class FloatExtensions
+internal static class FloatExtensions
 {
 	public static bool IsZero(this float value)
 	{

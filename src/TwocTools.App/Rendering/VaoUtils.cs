@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace TwocTools.App.Rendering;
 
-public static class VaoUtils
+internal static class VaoUtils
 {
 	public static unsafe uint CreateLineVao(GL gl, Vector3[] vertices)
 	{

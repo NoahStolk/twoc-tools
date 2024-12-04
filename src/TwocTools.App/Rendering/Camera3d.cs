@@ -1,11 +1,11 @@
-﻿using ImGuiGlfw;
+﻿using Detach.GlfwExtensions;
 using Silk.NET.GLFW;
 using System.Numerics;
 using TwocTools.App.Extensions;
 
 namespace TwocTools.App.Rendering;
 
-public sealed unsafe class Camera3d
+internal sealed unsafe class Camera3d
 {
 	private const MouseButton _lookButton = MouseButton.Right;
 	private const MouseButton _panButton = MouseButton.Middle;

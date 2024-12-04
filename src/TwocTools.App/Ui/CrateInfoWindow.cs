@@ -1,5 +1,5 @@
 ﻿using Detach;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using System.Numerics;
 using TwocTools.App.Extensions;
 using TwocTools.App.State;
@@ -9,7 +9,7 @@ using TwocTools.Core.Serializers;
 
 namespace TwocTools.App.Ui;
 
-public sealed unsafe class CrateInfoWindow
+internal sealed unsafe class CrateInfoWindow
 {
 	private readonly LevelState _levelState;
 
@@ -31,9 +31,9 @@ public sealed unsafe class CrateInfoWindow
 
 			ImGui.Separator();
 
-			ImGui.Text(Inline.Span($"Version: {_levelState.CrateGroupCollection.Version}"));
-			ImGui.Text(Inline.Span($"Crate group count: {_levelState.CrateGroupCollection.Count}"));
-			ImGui.Text(Inline.Span($"Crate count: {_levelState.CratesVisualization.Count}"));
+			ImGui.Text(Inline.Utf8($"Version: {_levelState.CrateGroupCollection.Version}"));
+			ImGui.Text(Inline.Utf8($"Crate group count: {_levelState.CrateGroupCollection.Count}"));
+			ImGui.Text(Inline.Utf8($"Crate count: {_levelState.CratesVisualization.Count}"));
 
 			ImGui.Separator();
 
@@ -91,11 +91,11 @@ public sealed unsafe class CrateInfoWindow
 				int countC = _levelState.CratesVisualization.Count(c => c.CrateTypeC == crateType);
 				int countD = _levelState.CratesVisualization.Count(c => c.CrateTypeD == crateType);
 
-				TableNextColumnText(Inline.Span(crateType), crateType.GetColor());
-				TableNextColumnText(Inline.Span(countA), countA == 0 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(countB), countB == 0 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(countC), countC == 0 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(countD), countD == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(crateType.ToUtf8Span(), crateType.GetColor());
+				TableNextColumnText(Inline.Utf8(countA), countA == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(countB), countB == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(countC), countC == 0 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(countD), countD == 0 ? colorDisabled : colorDefault);
 			}
 
 			ImGui.EndTable();
@@ -117,7 +117,7 @@ public sealed unsafe class CrateInfoWindow
 			ImGui.TableHeadersRow();
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -150,12 +150,12 @@ public sealed unsafe class CrateInfoWindow
 			{
 				ImGui.TableNextRow();
 
-				TableNextColumnText(Inline.Span(crateGroup.Position));
-				TableNextColumnText(Inline.Span(crateGroup.CrateOffset));
-				TableNextColumnText(Inline.Span(crateGroup.CrateCount));
-				TableNextColumnText(Inline.Span(crateGroup.Tilt));
-				TableNextColumnText(Inline.Span(crateGroup.TiltInRadians));
-				TableNextColumnText(Inline.Span(crateGroup.TiltInDegrees));
+				TableNextColumnText(Inline.Utf8(crateGroup.Position));
+				TableNextColumnText(Inline.Utf8(crateGroup.CrateOffset));
+				TableNextColumnText(Inline.Utf8(crateGroup.CrateCount));
+				TableNextColumnText(Inline.Utf8(crateGroup.Tilt));
+				TableNextColumnText(Inline.Utf8(crateGroup.TiltInRadians));
+				TableNextColumnText(Inline.Utf8(crateGroup.TiltInDegrees));
 			}
 
 			ImGui.EndTable();
@@ -192,7 +192,7 @@ public sealed unsafe class CrateInfoWindow
 				if (!ImGui.TableSetColumnIndex(i))
 					continue;
 
-				ImGui.TableHeader(ImGui.TableGetColumnName(i));
+				ImGui.TableHeader(Inline.Utf8(i));
 				if (!ImGui.IsItemHovered())
 					continue;
 
@@ -210,7 +210,7 @@ public sealed unsafe class CrateInfoWindow
 			}
 
 			ImGuiTableSortSpecsPtr sortsSpecs = ImGui.TableGetSortSpecs();
-			if (sortsSpecs.NativePtr != (void*)0 && sortsSpecs.SpecsDirty)
+			if (sortsSpecs.Handle != null && sortsSpecs.SpecsDirty)
 			{
 				uint sorting = sortsSpecs.Specs.ColumnUserID;
 				bool sortAscending = sortsSpecs.Specs.SortDirection == ImGuiSortDirection.Ascending;
@@ -264,35 +264,41 @@ public sealed unsafe class CrateInfoWindow
 			{
 				ImGui.TableNextRow();
 
-				TableNextColumnText(Inline.Span(crate.Index));
-				TableNextColumnText(Inline.Span(crate.GroupIndex));
-				TableNextColumnText(Inline.Span(crate.WorldPosition));
-				TableNextColumnText(Inline.Span(crate.A), crate.A is > -float.Epsilon and < float.Epsilon ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span($"{crate.LocalPositionX}, {crate.LocalPositionY}, {crate.LocalPositionZ}"));
+				TableNextColumnText(Inline.Utf8(crate.Index));
+				TableNextColumnText(Inline.Utf8(crate.GroupIndex));
+				TableNextColumnText(Inline.Utf8(crate.WorldPosition));
+				TableNextColumnText(Inline.Utf8(crate.A), crate.A is > -float.Epsilon and < float.Epsilon ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8($"{crate.LocalPositionX}, {crate.LocalPositionY}, {crate.LocalPositionZ}"));
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeA], crate.CrateTypeA.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeB], crate.CrateTypeB.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeC], crate.CrateTypeC.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeD], crate.CrateTypeD.GetColor());
-				TableNextColumnText(Inline.Span(crate.F), crate.F == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.G), crate.G == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.H), crate.H == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.I), crate.I == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.J), crate.J == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.K), crate.K == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Span(crate.ExclamationCrateIndex), crate.ExclamationCrateIndex == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.F), crate.F == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.G), crate.G == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.H), crate.H == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.I), crate.I == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.J), crate.J == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.K), crate.K == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.ExclamationCrateIndex), crate.ExclamationCrateIndex == -1 ? colorDisabled : colorDefault);
 			}
 
 			ImGui.EndTable();
 		}
 	}
 
-	private static void TableNextColumnText(ReadOnlySpan<char> text, Vector4 color)
+	private static void TableNextColumnText(string text, Vector4 color)
 	{
 		ImGui.TableNextColumn();
 		ImGui.TextColored(color, text);
 	}
 
-	private static void TableNextColumnText(ReadOnlySpan<char> text)
+	private static void TableNextColumnText(ReadOnlySpan<byte> text, Vector4 color)
+	{
+		ImGui.TableNextColumn();
+		ImGui.TextColored(color, text);
+	}
+
+	private static void TableNextColumnText(ReadOnlySpan<byte> text)
 	{
 		ImGui.TableNextColumn();
 		ImGui.Text(text);

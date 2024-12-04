@@ -3,7 +3,7 @@ using TwocTools.Core.DataTypes.Wmp;
 
 namespace TwocTools.App.State;
 
-public sealed class LevelState
+internal sealed class LevelState
 {
 	// TODO: Refactor.
 	// Visualization created from state (used for sorting, etc.)

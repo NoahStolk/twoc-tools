@@ -2,16 +2,11 @@
 
 namespace TwocTools.App.Rendering;
 
-public sealed class Shader
+internal sealed class Shader(uint id)
 {
 	private readonly Dictionary<string, int> _uniformLocations = new();
 
-	public Shader(uint id)
-	{
-		Id = id;
-	}
-
-	public uint Id { get; }
+	public uint Id { get; } = id;
 
 	public int GetUniformLocation(GL gl, string name)
 	{

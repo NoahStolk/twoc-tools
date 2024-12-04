@@ -1,19 +1,12 @@
-﻿using ImGuiNET;
+﻿using Hexa.NET.ImGui;
 using NativeFileDialogSharp;
 using TwocTools.App.State;
 
 namespace TwocTools.App.Ui;
 
-public sealed class GameSelectWindow
+internal sealed class GameSelectWindow(GameState gameState)
 {
-	private readonly GameState _gameState;
-
 	private GameVersion _gameVersion = GameVersion.Ps2GreatestHits;
-
-	public GameSelectWindow(GameState gameState)
-	{
-		_gameState = gameState;
-	}
 
 	public void Render()
 	{
@@ -39,12 +32,14 @@ public sealed class GameSelectWindow
 			if (ImGui.Button("Choose directory"))
 				Import();
 		}
+
+		ImGui.End();
 	}
 
 	private void Import()
 	{
 		DialogResult dialogResult = Dialog.FolderPicker();
 		if (dialogResult.IsOk)
-			_gameState.SetGame(dialogResult.Path, _gameVersion);
+			gameState.SetGame(dialogResult.Path, _gameVersion);
 	}
 }

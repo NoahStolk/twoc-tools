@@ -1,6 +1,6 @@
 ﻿namespace TwocTools.App.State;
 
-public enum GameVersion
+internal enum GameVersion
 {
 	// TODO: Add more versions?
 	Ps2Original,
