@@ -192,7 +192,7 @@ internal sealed unsafe class CrateInfoWindow
 				if (!ImGui.TableSetColumnIndex(i))
 					continue;
 
-				ImGui.TableHeader(Inline.Utf8(i));
+				ImGui.TableHeader(Inline.Utf8($"##{i}"));
 				if (!ImGui.IsItemHovered())
 					continue;
 
