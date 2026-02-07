@@ -2,104 +2,79 @@
 
 namespace TwocTools.Core.DataTypes.Crt;
 
-public record struct Crate
+public record struct Crate(
+	int Index,
+	int GroupIndex,
+	Vector3 WorldPosition,
+	float A,
+	short LocalPositionX,
+	short LocalPositionY,
+	short LocalPositionZ,
+	CrateType CrateTypeA,
+	CrateType CrateTypeB,
+	CrateType CrateTypeC,
+	CrateType CrateTypeD,
+	short NeighborIndexPosY,
+	short NeighborIndexNegY,
+	short NeighborIndexPosZ,
+	short NeighborIndexNegZ,
+	short NeighborIndexPosX,
+	short NeighborIndexNegX,
+	short ExclamationCrateIndex)
 {
-	public Crate(
-		int index,
-		int groupIndex,
-		Vector3 worldPosition,
-		float a,
-		short localPositionX,
-		short localPositionY,
-		short localPositionZ,
-		CrateType crateTypeA,
-		CrateType crateTypeB,
-		CrateType crateTypeC,
-		CrateType crateTypeD,
-		short f,
-		short g,
-		short h,
-		short i,
-		short j,
-		short k,
-		short exclamationCrateIndex)
-	{
-		Index = index;
-		GroupIndex = groupIndex;
-		WorldPosition = worldPosition;
-		A = a;
-		LocalPositionX = localPositionX;
-		LocalPositionY = localPositionY;
-		LocalPositionZ = localPositionZ;
-		CrateTypeA = crateTypeA;
-		CrateTypeB = crateTypeB;
-		CrateTypeC = crateTypeC;
-		CrateTypeD = crateTypeD;
-		F = f;
-		G = g;
-		H = h;
-		I = i;
-		J = j;
-		K = k;
-		ExclamationCrateIndex = exclamationCrateIndex;
-	}
+	public int Index { get; } = Index;
 
-	public int Index { get; }
+	public int GroupIndex { get; } = GroupIndex;
 
-	public int GroupIndex { get; }
+	public Vector3 WorldPosition { get; } = WorldPosition;
 
-	public Vector3 WorldPosition { get; }
+	public float A { get; } = A;
 
-	public float A { get; }
+	public short LocalPositionX { get; } = LocalPositionX;
 
-	public short LocalPositionX { get; }
+	public short LocalPositionY { get; } = LocalPositionY;
 
-	public short LocalPositionY { get; }
-
-	public short LocalPositionZ { get; }
+	public short LocalPositionZ { get; } = LocalPositionZ;
 
 	/// <summary>
 	/// The default crate type.
 	/// </summary>
-	public CrateType CrateTypeA { get; }
+	public CrateType CrateTypeA { get; } = CrateTypeA;
 
 	/// <summary>
 	/// The second crate type. This seems to be used for time trial.
 	/// </summary>
 	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
-	public CrateType CrateTypeB { get; }
+	public CrateType CrateTypeB { get; } = CrateTypeB;
 
 	/// <summary>
 	/// This third crate type. This seems to be used for crates of type <see cref="CrateType.Slot"/> and <see cref="CrateType.Empty"/>.
 	/// </summary>
 	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
-	public CrateType CrateTypeC { get; }
+	public CrateType CrateTypeC { get; } = CrateTypeC;
 
 	/// <summary>
 	/// This third crate type. This seems to be used for crates of type <see cref="CrateType.Slot"/>.
 	/// </summary>
 	/// <remarks>This value is only present when crate group version is 3 or higher.</remarks>
-	public CrateType CrateTypeD { get; }
+	public CrateType CrateTypeD { get; } = CrateTypeD;
 
-	// TODO: Figure out which is which exactly. Some data in the game doesn't appear to be correct, so these values might just be unused.
-	// Y
-	public short F { get; }
+	// Some data in the game doesn't appear to be correct, so these values might be unused?
+	public short NeighborIndexPosY { get; } = NeighborIndexPosY;
 
-	public short G { get; }
+	public short NeighborIndexNegY { get; } = NeighborIndexNegY;
 
-	// Z
-	public short H { get; }
+	public short NeighborIndexPosZ { get; } = NeighborIndexPosZ;
 
-	public short I { get; }
+	public short NeighborIndexNegZ { get; } = NeighborIndexNegZ;
 
-	// X
-	public short J { get; }
+	public short NeighborIndexPosX { get; } = NeighborIndexPosX;
 
-	public short K { get; }
+	public short NeighborIndexNegX { get; } = NeighborIndexNegX;
 
 	/// <summary>
 	/// This value is only present when crate group version is 3 or higher.
 	/// It has something to do with crates of type <see cref="CrateType.Empty"/>.
 	/// </summary>
-	public short ExclamationCrateIndex { get; }
+	public short ExclamationCrateIndex { get; } = ExclamationCrateIndex;
 }

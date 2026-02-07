@@ -87,12 +87,12 @@ internal sealed class SceneWindow(LevelState levelState, SceneFramebuffer sceneF
 				Crate types: {selectedCrate.Value.CrateTypeA.ToUtf8Span()} {selectedCrate.Value.CrateTypeB.ToUtf8Span()} {selectedCrate.Value.CrateTypeC.ToUtf8Span()} {selectedCrate.Value.CrateTypeD.ToUtf8Span()}
 				Exclamation crate index: {selectedCrate.Value.ExclamationCrateIndex}
 				Neighboring crate indices:
-					Up:       {selectedCrate.Value.F}
-					Down:     {selectedCrate.Value.G}
-					Forward:  {selectedCrate.Value.H}
-					Backward: {selectedCrate.Value.I}
-					Left:     {selectedCrate.Value.J}
-					Right:    {selectedCrate.Value.K}
+					Up:       {selectedCrate.Value.NeighborIndexPosY}
+					Down:     {selectedCrate.Value.NeighborIndexNegY}
+					Forward:  {selectedCrate.Value.NeighborIndexPosZ}
+					Backward: {selectedCrate.Value.NeighborIndexNegZ}
+					Left:     {selectedCrate.Value.NeighborIndexPosX}
+					Right:    {selectedCrate.Value.NeighborIndexNegX}
 				""");
 			ImGui.SetTooltip(tooltip);
 		}

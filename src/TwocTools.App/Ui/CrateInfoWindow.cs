@@ -244,12 +244,12 @@ internal sealed unsafe class CrateInfoWindow
 					6 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeB.CompareTo(b.CrateTypeB) : -a.CrateTypeB.CompareTo(b.CrateTypeB)),
 					7 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeC.CompareTo(b.CrateTypeC) : -a.CrateTypeC.CompareTo(b.CrateTypeC)),
 					8 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.CrateTypeD.CompareTo(b.CrateTypeD) : -a.CrateTypeD.CompareTo(b.CrateTypeD)),
-					9 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.F.CompareTo(b.F) : -a.F.CompareTo(b.F)),
-					10 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.G.CompareTo(b.G) : -a.G.CompareTo(b.G)),
-					11 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.H.CompareTo(b.H) : -a.H.CompareTo(b.H)),
-					12 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.I.CompareTo(b.I) : -a.I.CompareTo(b.I)),
-					13 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.J.CompareTo(b.J) : -a.J.CompareTo(b.J)),
-					14 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.K.CompareTo(b.K) : -a.K.CompareTo(b.K)),
+					9 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.NeighborIndexPosY.CompareTo(b.NeighborIndexPosY) : -a.NeighborIndexPosY.CompareTo(b.NeighborIndexPosY)),
+					10 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.NeighborIndexNegY.CompareTo(b.NeighborIndexNegY) : -a.NeighborIndexNegY.CompareTo(b.NeighborIndexNegY)),
+					11 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.NeighborIndexPosZ.CompareTo(b.NeighborIndexPosZ) : -a.NeighborIndexPosZ.CompareTo(b.NeighborIndexPosZ)),
+					12 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.NeighborIndexNegZ.CompareTo(b.NeighborIndexNegZ) : -a.NeighborIndexNegZ.CompareTo(b.NeighborIndexNegZ)),
+					13 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.NeighborIndexPosX.CompareTo(b.NeighborIndexPosX) : -a.NeighborIndexPosX.CompareTo(b.NeighborIndexPosX)),
+					14 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.NeighborIndexNegX.CompareTo(b.NeighborIndexNegX) : -a.NeighborIndexNegX.CompareTo(b.NeighborIndexNegX)),
 					15 => () => _levelState.CratesVisualization.Sort((a, b) => sortAscending ? a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex) : -a.ExclamationCrateIndex.CompareTo(b.ExclamationCrateIndex)),
 					_ => static () => { },
 				};
@@ -273,12 +273,12 @@ internal sealed unsafe class CrateInfoWindow
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeB], crate.CrateTypeB.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeC], crate.CrateTypeC.GetColor());
 				TableNextColumnText(_crateTypeNames[crate.CrateTypeD], crate.CrateTypeD.GetColor());
-				TableNextColumnText(Inline.Utf8(crate.F), crate.F == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Utf8(crate.G), crate.G == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Utf8(crate.H), crate.H == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Utf8(crate.I), crate.I == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Utf8(crate.J), crate.J == -1 ? colorDisabled : colorDefault);
-				TableNextColumnText(Inline.Utf8(crate.K), crate.K == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.NeighborIndexPosY), crate.NeighborIndexPosY == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.NeighborIndexNegY), crate.NeighborIndexNegY == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.NeighborIndexPosZ), crate.NeighborIndexPosZ == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.NeighborIndexNegZ), crate.NeighborIndexNegZ == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.NeighborIndexPosX), crate.NeighborIndexPosX == -1 ? colorDisabled : colorDefault);
+				TableNextColumnText(Inline.Utf8(crate.NeighborIndexNegX), crate.NeighborIndexNegX == -1 ? colorDisabled : colorDefault);
 				TableNextColumnText(Inline.Utf8(crate.ExclamationCrateIndex), crate.ExclamationCrateIndex == -1 ? colorDisabled : colorDefault);
 			}
 

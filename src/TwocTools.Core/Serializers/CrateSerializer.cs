@@ -46,12 +46,12 @@ public static class CrateSerializer
 					crateTypeD = (CrateType)reader.ReadSByte();
 				}
 
-				short f = reader.ReadInt16();
-				short g = reader.ReadInt16();
-				short h = reader.ReadInt16();
-				short i = reader.ReadInt16();
-				short j = reader.ReadInt16();
-				short k = reader.ReadInt16();
+				short neighborIndexPosY = reader.ReadInt16();
+				short neighborIndexNegY = reader.ReadInt16();
+				short neighborIndexPosZ = reader.ReadInt16();
+				short neighborIndexNegZ = reader.ReadInt16();
+				short neighborIndexPosX = reader.ReadInt16();
+				short neighborIndexNegX = reader.ReadInt16();
 				short exclamationCrateIndex = -1;
 				if (version >= 3)
 				{
@@ -59,24 +59,24 @@ public static class CrateSerializer
 				}
 
 				crates.Add(new Crate(
-					index: crateOffset + crateIndex,
-					groupIndex: crateGroupIndex,
-					worldPosition: worldPosition,
-					a: a,
-					localPositionX: localPositionX,
-					localPositionY: localPositionY,
-					localPositionZ: localPositionZ,
-					crateTypeA: crateTypeA,
-					crateTypeB: crateTypeB,
-					crateTypeC: crateTypeC,
-					crateTypeD: crateTypeD,
-					f: f,
-					g: g,
-					h: h,
-					i: i,
-					j: j,
-					k: k,
-					exclamationCrateIndex: exclamationCrateIndex));
+					Index: crateOffset + crateIndex,
+					GroupIndex: crateGroupIndex,
+					WorldPosition: worldPosition,
+					A: a,
+					LocalPositionX: localPositionX,
+					LocalPositionY: localPositionY,
+					LocalPositionZ: localPositionZ,
+					CrateTypeA: crateTypeA,
+					CrateTypeB: crateTypeB,
+					CrateTypeC: crateTypeC,
+					CrateTypeD: crateTypeD,
+					NeighborIndexPosY: neighborIndexPosY,
+					NeighborIndexNegY: neighborIndexNegY,
+					NeighborIndexPosZ: neighborIndexPosZ,
+					NeighborIndexNegZ: neighborIndexNegZ,
+					NeighborIndexPosX: neighborIndexPosX,
+					NeighborIndexNegX: neighborIndexNegX,
+					ExclamationCrateIndex: exclamationCrateIndex));
 			}
 
 			CrateGroup crateGroup = new(position, crateOffset, crateCount, tilt, crates);
